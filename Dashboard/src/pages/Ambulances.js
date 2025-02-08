@@ -210,10 +210,13 @@ const GoogleMapComponent = ({ ambulances }) => {
     googleMapsApiKey: GOOGLE_MAPS_API,
     libraries,
   });
+
   const [directions, setDirections] = useState(null);
+  const [routeInfo, setRouteInfo] = useState(null);
 
   const fetchRoute = useCallback((ambulance) => {
     if (!window.google || !window.google.maps) return;
+
     const directionsService = new window.google.maps.DirectionsService();
     const request = {
       origin: {
@@ -223,9 +226,17 @@ const GoogleMapComponent = ({ ambulances }) => {
       destination: defaultLocation,
       travelMode: window.google.maps.TravelMode.DRIVING,
     };
+
     directionsService.route(request, (result, status) => {
       if (status === window.google.maps.DirectionsStatus.OK) {
         setDirections(result);
+
+        // Extract distance and duration
+        const route = result.routes[0].legs[0];
+        setRouteInfo({
+          distance: route.distance.text,
+          duration: route.duration.text,
+        });
       }
     });
   }, []);
@@ -234,30 +245,45 @@ const GoogleMapComponent = ({ ambulances }) => {
   if (!isLoaded) return <p>Loading...</p>;
 
   return (
-    <GoogleMap
-      mapContainerStyle={mapContainerStyle}
-      zoom={14}
-      center={defaultLocation}
-      options={options}
-    >
-      <TrafficLayer />
-      <Marker position={defaultLocation} label="You" />
-      {ambulances.map((ambulance, index) => (
-        <Marker
-          key={index}
-          position={{
-            lat: ambulance.location.latitude,
-            lng: ambulance.location.longitude,
-          }}
-          icon={{
-            url: "https://img.freepik.com/premium-vector/ambulance-emergency-medical-services-cartoon-ambulance-ambulance-icon-vector-illustration_1234575-9079.jpg",
-            scaledSize: new window.google.maps.Size(40, 40),
-          }}
-          onClick={() => fetchRoute(ambulance)}
-        />
-      ))}
-      {directions && <DirectionsRenderer directions={directions} />}
-    </GoogleMap>
+    <div className="relative">
+      <GoogleMap
+        mapContainerStyle={mapContainerStyle}
+        zoom={14}
+        center={defaultLocation}
+        options={options}
+      >
+        <TrafficLayer />
+        <Marker position={defaultLocation} label="You" />
+
+        {ambulances.map((ambulance, index) => (
+          <Marker
+            key={index}
+            position={{
+              lat: ambulance.location.latitude,
+              lng: ambulance.location.longitude,
+            }}
+            icon={{
+              url: "https://img.freepik.com/premium-vector/ambulance-emergency-medical-services-cartoon-ambulance-ambulance-icon-vector-illustration_1234575-9079.jpg",
+              scaledSize: new window.google.maps.Size(40, 40),
+            }}
+            onMouseOver={() => fetchRoute(ambulance)}
+            onMouseOut={() => {
+              setDirections(null);
+              setRouteInfo(null);
+            }}
+          />
+        ))}
+
+        {directions && <DirectionsRenderer directions={directions} />}
+      </GoogleMap>
+
+      {routeInfo && (
+        <div className="absolute top-4 left-4 bg-white p-3 rounded-lg shadow-md">
+          <p className="text-sm font-medium">Distance: {routeInfo.distance}</p>
+          <p className="text-sm font-medium">Duration: {routeInfo.duration}</p>
+        </div>
+      )}
+    </div>
   );
 };
 
