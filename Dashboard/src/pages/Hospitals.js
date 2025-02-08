@@ -1,13 +1,33 @@
 import React, { useState, useEffect } from "react";
-import { MapPin, Hospital, PhoneCall, Star, RefreshCcw, Filter, Navigation } from "lucide-react";
+import {
+  MapPin,
+  Hospital,
+  PhoneCall,
+  Star,
+  RefreshCcw,
+  Filter,
+  Navigation,
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const API_KEY = process.env.REACT_APP_GOOGLE_PLACES_API_KEY;
 const latitude = 19.1072258;
 const longitude = 72.8372432;
-const DEFAULT_HOSPITAL_IMAGE = "https://via.placeholder.com/400x200?text=Hospital"; // Fallback image
+const DEFAULT_HOSPITAL_IMAGE =
+  "https://via.placeholder.com/400x200?text=Hospital"; // Fallback image
 
-const HospitalCard = ({ name, vicinity, rating, userRatings, phone, placeId, photoRef, plusCode, lat, lng }) => {
+const HospitalCard = ({
+  name,
+  vicinity,
+  rating,
+  userRatings,
+  phone,
+  placeId,
+  photoRef,
+  plusCode,
+  lat,
+  lng,
+}) => {
   const navigate = useNavigate();
 
   // Construct hospital image URL (Use fallback if not available)
@@ -25,7 +45,11 @@ const HospitalCard = ({ name, vicinity, rating, userRatings, phone, placeId, pho
   return (
     <div className="p-4 border rounded-lg shadow-sm flex flex-col min-h-[460px]">
       {/* Hospital Image */}
-      <img src={photoUrl} alt={name} className="w-full h-40 object-cover rounded-lg mb-3" />
+      <img
+        src={photoUrl}
+        alt={name}
+        className="w-full h-40 object-cover rounded-lg mb-3"
+      />
 
       {/* Header */}
       <div className="flex items-center mb-3">
@@ -46,7 +70,11 @@ const HospitalCard = ({ name, vicinity, rating, userRatings, phone, placeId, pho
       <div className="flex items-center mt-2">
         <Star className="h-4 w-4 text-yellow-500" />
         <span className="text-sm text-gray-700 ml-1">{rating || "N/A"}</span>
-        {userRatings && <span className="text-xs text-gray-500 ml-2">({userRatings} reviews)</span>}
+        {userRatings && (
+          <span className="text-xs text-gray-500 ml-2">
+            ({userRatings} reviews)
+          </span>
+        )}
       </div>
 
       {/* Phone Number */}
@@ -77,12 +105,14 @@ const Hospitals = () => {
   const [hospitals, setHospitals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [selectedSpecialty, setSelectedSpecialty] = useState(""); // Selected specialty filter
+  const [selectedSpecialty, setSelectedSpecialty] = useState("");
 
   useEffect(() => {
     const fetchHospitals = async () => {
       try {
-        const response = await fetch(`http://127.0.0.1:5000/api/hospitals?lat=${latitude}&lng=${longitude}`);
+        const response = await fetch(
+          `http://127.0.0.1:5000/api/hospitals?lat=${latitude}&lng=${longitude}`
+        );
         const data = await response.json();
 
         if (Array.isArray(data)) {
@@ -118,9 +148,9 @@ const Hospitals = () => {
         <button
           className="flex items-center bg-blue-600 text-white px-4 py-2 rounded shadow hover:bg-blue-700"
           onClick={() => window.location.reload()}
-          style={{backgroundColor:"#ff0000"}}
+          style={{ backgroundColor: "#ff0000" }}
         >
-          <RefreshCcw className="h-4 w-4 mr-2"  style={{color:"white"}}/>
+          <RefreshCcw className="h-4 w-4 mr-2" style={{ color: "white" }} />
           Refresh
         </button>
       </div>

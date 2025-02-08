@@ -1,14 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Shield, Ambulance, History, CreditCard } from "lucide-react";
-import Button from "./ui/Button";
+import {
+  doc,
+  getDocs,
+  collection,
+  query,
+  where,
+  updateDoc,
+} from "firebase/firestore";
+import { db } from "../firebase";
 import Avatar from "./ui/Avatar";
 
 // Define routes with appropriate icons
 const routes = [
   { label: "Ride Requests", icon: Ambulance, path: "/driver/requests" },
   { label: "Previous Rides", icon: History, path: "/driver/rides-history" },
-  { label: "Payment History", icon: CreditCard, path: "/driver/payment-history" },
+  {
+    label: "Payment History",
+    icon: CreditCard,
+    path: "/driver/payment-history",
+  },
 ];
 
 function DriverSidebar() {
@@ -23,11 +35,44 @@ function DriverSidebar() {
     localStorage.getItem("driverStatus") === "on"
   );
 
-  // Toggle duty status
-  const toggleDutyStatus = () => {
+  useEffect(() => {
+    localStorage.setItem("driverStatus", isOnDuty ? "on" : "off");
+  }, [isOnDuty]);
+
+  // Function to toggle duty status and update Firestore
+  const toggleDutyStatus = async () => {
     const newStatus = !isOnDuty;
     setIsOnDuty(newStatus);
     localStorage.setItem("driverStatus", newStatus ? "on" : "off");
+
+    if (!email) {
+      console.error("User email not found in localStorage");
+      return;
+    }
+
+    try {
+      // Query Firestore to find the driver record by email
+      const driversRef = collection(db, "drivers");
+      const q = query(driversRef, where("email", "==", email));
+      const querySnapshot = await getDocs(q);
+
+      if (!querySnapshot.empty) {
+        const driverDoc = querySnapshot.docs[0];
+        await updateDoc(doc(db, "drivers", driverDoc.id), {
+          status: newStatus ? "A" : "I",
+        });
+
+        console.log(
+          `Driver status updated to ${
+            newStatus ? "Active (A)" : "Inactive (I)"
+          }`
+        );
+      } else {
+        console.warn("No driver found with the given email");
+      }
+    } catch (error) {
+      console.error("Error updating driver status:", error);
+    }
   };
 
   return (
@@ -93,7 +138,11 @@ function DriverSidebar() {
                 }`}
               ></span>
             </span>
-            <span className={`text-sm font-medium ${isOnDuty ? "text-green-600" : "text-gray-500"}`}>
+            <span
+              className={`text-sm font-medium ${
+                isOnDuty ? "text-green-600" : "text-gray-500"
+              }`}
+            >
               {isOnDuty ? "On Duty" : "Off Duty"}
             </span>
           </label>
