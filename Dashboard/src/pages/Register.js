@@ -19,6 +19,8 @@ const Register = () => {
             <input type="email" placeholder="Enter your email" style={styles.input} />
             <label style={styles.labelStyle}>Mobile Number:</label>
             <input type="tel" placeholder="Enter your mobile number" style={styles.input} />
+            <label style={styles.labelStyle}>Password:</label>
+            <input type="password" placeholder="Enter your password" style={styles.input} />
             <label style={styles.labelStyle}>Aadhar Card Photo:</label>
             <input type="file" style={styles.input} />
             <label style={styles.labelStyle}>Driving License:</label>
@@ -34,6 +36,8 @@ const Register = () => {
             <input type="email" placeholder="Enter your email" style={styles.input} />
             <label style={styles.labelStyle}>Mobile Number:</label>
             <input type="tel" placeholder="Enter your mobile number" style={styles.input} />
+            <label style={styles.labelStyle}>Password:</label>
+            <input type="password" placeholder="Enter your password" style={styles.input} />
             <label style={styles.labelStyle}>Health History:</label>
             <textarea placeholder="Enter any health history (e.g., allergies)" style={{ ...styles.input, height: '80px' }}></textarea>
           </>
@@ -89,6 +93,7 @@ const Register = () => {
 
 const styles = {
   container: {
+    paddingTop:20,
     backgroundColor: '#fff',
     color: '#900',
     fontFamily: 'Roboto, sans-serif',

@@ -11,6 +11,7 @@ import Transactions from './pages/Transactions';
 import Settings from './pages/Settings';
 import HomePage from './pages/HomePage';
 import Register from './pages/Register';
+import Login from './pages/Login';
 
 function App() {
   return (
@@ -24,14 +25,16 @@ function AppContent() {
   const location = useLocation();
   const isHomePage = location.pathname === '/';
   const isRegisterPage = location.pathname === '/register';
+  const isLoginPage = location.pathname === '/login';
 
   return (
     <div className={`flex min-h-screen`}>
-      {(!isHomePage && !isRegisterPage) && <Sidebar />}
+      {(!isHomePage && !isRegisterPage && !isLoginPage) && <Sidebar />}
       <main className="flex-1 overflow-y-auto">
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
           {/* <Router path="/register" element={<Register/>}/> */}
           
           <Route path="/dashboard" element={<Dashboard />} />
