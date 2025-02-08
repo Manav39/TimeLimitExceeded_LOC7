@@ -17,51 +17,6 @@ const Register = () => {
   });
   const [errors, setErrors] = useState({});
 
-  const handleSubmit = async (event) => {
-    event.preventDefault(); // Prevent form from reloading the page
-
-    try {
-      if (selectedOption === "driver") {
-        // Reference to Firestore collection
-        const docRef = await addDoc(collection(db, "drivers"), {
-          name: formData.name,
-          email: formData.email,
-          mobile: formData.mobile,
-          password: formData.password, // Hash this in a real-world scenario
-          aadhar: formData.aadhar || "",
-          license: formData.license || "",
-          employerId: formData.employerId || "",
-          status: "N",
-          lat: "",
-          long: "",
-          ambulanceNumber: formData.ambulanceNumber || "",
-          timestamp: new Date(),
-        });
-
-        console.log("Document written with ID: ", docRef.id);
-        alert("Driver registered successfully!");
-      } else if (selectedOption === "user") {
-        // Reference to Firestore collection
-        const docRef = await addDoc(collection(db, "users"), {
-          name: formData.name,
-          email: formData.email,
-          mobile: formData.mobile,
-          password: formData.password, // Hash this in a real-world scenario
-          healthHistory: formData.healthHistory || "",
-          lat: "",
-          long: "",
-          timestamp: new Date(),
-        });
-
-        console.log("User registered with ID: ", docRef.id);
-        alert("User registered successfully!");
-      }
-    } catch (error) {
-      console.error("Error adding document: ", error);
-      alert("Error registering driver");
-    }
-  };
-
   const handleOptionChange = (value) => {
     setSelectedOption(value);
     setErrors({});
@@ -130,13 +85,53 @@ const Register = () => {
     return isValid;
   };
 
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   if (validateForm()) {
-  //     console.log('Form submitted successfully', formData);
-  //     // Add form submission logic here
-  //   }
-  // };
+  const handleSubmit = async(e) => {
+    e.preventDefault();
+      if (validateForm()) {
+        e.preventDefault(); // Prevent form from reloading the page
+
+      try {
+        if (selectedOption === "driver") {
+          // Reference to Firestore collection
+          const docRef = await addDoc(collection(db, "drivers"), {
+            name: formData.name,
+            email: formData.email,
+            mobile: formData.mobile,
+            password: formData.password, // Hash this in a real-world scenario
+            aadhar: formData.aadhar || "",
+            license: formData.license || "",
+            employerId: formData.employerId || "",
+            status: "N",
+            lat: "",
+            long: "",
+            ambulanceNumber: formData.ambulanceNumber || "",
+            timestamp: new Date(),
+          });
+
+          console.log("Document written with ID: ", docRef.id);
+          alert("Driver registered successfully!");
+        } else if (selectedOption === "user") {
+          // Reference to Firestore collection
+          const docRef = await addDoc(collection(db, "users"), {
+            name: formData.name,
+            email: formData.email,
+            mobile: formData.mobile,
+            password: formData.password, // Hash this in a real-world scenario
+            healthHistory: formData.healthHistory || "",
+            lat: "",
+            long: "",
+            timestamp: new Date(),
+          });
+
+          console.log("User registered with ID: ", docRef.id);
+          alert("User registered successfully!");
+        }
+      } catch (error) {
+        console.error("Error adding document: ", error);
+        alert("Error registering driver");
+      }
+    }
+  };
 
   const renderFormContent = () => {
     switch (selectedOption) {
