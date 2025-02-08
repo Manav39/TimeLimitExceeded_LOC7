@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Navbar from './Navbar';
 
 const Login = () => {
   const [selectedOption, setSelectedOption] = useState('user');
@@ -20,7 +19,6 @@ const Login = () => {
   };
 
   return (
-    <div><Navbar/>
     <div style={styles.container}>
       <div style={styles.formWrapper}>
         <h2 style={styles.heading}>Login</h2>
@@ -40,12 +38,11 @@ const Login = () => {
         </div>
         <form style={styles.formContent}>{renderLoginForm()}</form>
         <button style={styles.loginButton}>Login</button>
-        {/* <div style={styles.registerPrompt}>
+        <div style={styles.registerPrompt}>
           <span style={{ color: '#ff0000' }}>Don't have an account?</span>
           <a href="/register" style={styles.registerLink}>Register here</a>
-        </div> */}
+        </div>
       </div>
-    </div>
     </div>
   );
 };
@@ -101,7 +98,7 @@ const styles = {
     fontSize: '14px',
     width: '100%',
     boxSizing: 'border-box',
-    color: '#ff0000',
+    color: '#000',
   },
   loginButton: {
     backgroundColor: '#ff0000',
