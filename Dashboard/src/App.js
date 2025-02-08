@@ -14,6 +14,7 @@ import Ambulances from './pages/Ambulances';
 import Hospitals from './pages/Hospitals';
 import Register from './pages/Register';
 import Login from './pages/Login';
+import EmergencyHelpline from './pages/EmergencyHelpline';
 
 function App() {
   return (
@@ -28,10 +29,11 @@ function AppContent() {
   const isHomePage = location.pathname === '/';
   const isRegisterPage = location.pathname === '/register';
   const isLoginPage = location.pathname === '/login';
+  const isEmergencyHelplinePage = location.pathname === '/emergencyhelpline';
 
   return (
     <div className={`flex min-h-screen`}>
-      {(!isHomePage && !isRegisterPage && !isLoginPage) && <Sidebar />}
+      {(!isHomePage && !isRegisterPage && !isLoginPage && !isEmergencyHelplinePage) && <Sidebar />}
       <main className="flex-1 overflow-y-auto">
         <Routes>
           <Route path="/" element={<HomePage />} />
@@ -47,6 +49,7 @@ function AppContent() {
           <Route path="/contracts" element={<Contracts />} />
           <Route path="/transactions" element={<Transactions />} />
           <Route path="/settings" element={<Settings />} /> */}
+          <Route path='/emergencyhelpline' element={<EmergencyHelpline />} />
           <Route path='/ambulance' element={<Ambulances />} />
           <Route path="/hospitals" element={<Hospitals />} />
         </Routes>

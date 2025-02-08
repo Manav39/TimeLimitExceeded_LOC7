@@ -16,8 +16,11 @@ const Navbar = () => {
           <li>
             <a href="/about" style={styles.navLink}>About</a>
           </li>
-          <li>
+          {/* <li>
             <a href="/contact" style={styles.navLink}>Contact</a>
+          </li> */}
+          <li>
+            <a href="/emergencyhelpline" style={styles.navLink}>Emergency Helpline</a>
           </li>
         </ul>
       </nav>
@@ -41,8 +44,10 @@ const Navbar = () => {
           },
           logo: {
             fontSize: "2rem",
-            fontWeight: "bold",
-            fontFamily: "'Montserrat', sans-serif",
+            // fontWeight: "bold",
+            // fontFamily: "'Montserrat', sans-serif",
+            fontWeight: "800",
+            // fontSize: "1.1rem",
           },
           navList: {
             display: "flex",

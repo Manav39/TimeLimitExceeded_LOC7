@@ -37,7 +37,7 @@ const HomePage = () => {
               description="Quickly locate the nearest hospitals based on your location"
             />
             <FeatureCard
-              icon={<CreditCard size={40} color="#ff0000" />}
+              icon={<CreditCard size={40} color="#ff0000"  />}
               title="Easy Payments"
               description="Secure and hassle-free payment options including UPI and cards"
             />
@@ -185,6 +185,9 @@ const styles = {
     boxShadow: "0 4px 8px rgba(0, 0, 0, 0.15)",
   },
   featureIcon: {
+    display: "flex", // Added to center the icon
+    alignItems: "center", // Vertically align the icon
+    justifyContent: "center", // Horizontally align the icon
     marginBottom: "1rem",
   },
   featureTitle: {
