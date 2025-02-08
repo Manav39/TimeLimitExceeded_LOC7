@@ -1,17 +1,41 @@
+import React, { useEffect } from "react";
 import { Ambulance, MapPin, CreditCard, Hospital, Phone, Bell, Languages } from "lucide-react";
 import hero_img from "../images/hero_img.png";
 import Navbar from "./Navbar";
 
 const HomePage = () => {
+  useEffect(() => {
+    const getLocation = () => {
+      if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const { latitude, longitude } = position.coords;
+            localStorage.setItem("userLatitude", latitude);
+            localStorage.setItem("userLongitude", longitude);
+          },
+          (error) => {
+            if (error.code === error.PERMISSION_DENIED) {
+              alert("❗ Location access is mandatory for the app to function properly.");
+              getLocation(); // Ask for permission again
+            }
+          }
+        );
+      } else {
+        alert("Geolocation is not supported by your browser.");
+      }
+    };
+
+    getLocation();
+  }, []);
+
   return (
     <div style={styles.container}>
-      
-      <Navbar/>
+      <Navbar />
       <main>
         <section style={styles.hero}>
           <div style={styles.heroContent}>
             <div style={styles.heroText}>
-              <h2 style={styles.heroTitle}>"Because Every Second      Counts"</h2>
+              <h2 style={styles.heroTitle}>"Because Every Second Counts"</h2>
               <p style={styles.heroSubtitle}>
                 Fast, reliable ambulance service at your fingertips
               </p>
@@ -37,7 +61,7 @@ const HomePage = () => {
               description="Quickly locate the nearest hospitals based on your location"
             />
             <FeatureCard
-              icon={<CreditCard size={40} color="#ff0000"  />}
+              icon={<CreditCard size={40} color="#ff0000" />}
               title="Easy Payments"
               description="Secure and hassle-free payment options including UPI and cards"
             />
@@ -61,7 +85,9 @@ const HomePage = () => {
 
         <section style={styles.helpline}>
           <h3 style={styles.sectionTitle}>Emergency Helpline</h3>
-          <p style={styles.helplineText}>In case of extreme emergencies, call our 24/7 helpline</p>
+          <p style={styles.helplineText}>
+            In case of extreme emergencies, call our 24/7 helpline
+          </p>
           <div style={styles.helplineNumber}>
             <Phone size={24} color="#ff0000" />
             <span>108</span>
@@ -236,5 +262,4 @@ const styles = {
   },
 }
 
-export default HomePage
-
+export default HomePage;

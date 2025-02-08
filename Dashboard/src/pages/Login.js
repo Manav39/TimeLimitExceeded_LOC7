@@ -6,7 +6,7 @@ import { collection, query, where, getDocs } from "firebase/firestore";
 const Login = () => {
   const [selectedOption, setSelectedOption] = useState("user");
   const [email, setEmail] = useState("");
-  const naviagte = useNavigate();
+  const navigate = useNavigate();
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -37,7 +37,13 @@ const Login = () => {
             isAuthenticated = true;
             alert(`Login successful as ${selectedOption}`);
             localStorage.setItem("userRole", selectedOption);
-            naviagte("/ambulance");
+            localStorage.setItem("userEmail", email);
+            if(collectionName === "drivers") {
+              navigate("/driver/requests");
+            }
+            else {
+              navigate("/ambulance");
+            }
             // Redirect logic can be added here (e.g., navigate to dashboard)
           }
         });
