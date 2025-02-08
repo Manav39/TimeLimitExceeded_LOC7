@@ -1,32 +1,79 @@
-import React, { useState } from 'react';
-import Navbar from './Navbar';
-
+import React, { useState } from "react";
+import Navbar from "./Navbar";
+import { db } from "../firebase";
+import { addDoc, collection } from "firebase/firestore";
 const Register = () => {
-  const [selectedOption, setSelectedOption] = useState('driver');
+  const [selectedOption, setSelectedOption] = useState("driver");
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    mobile: '',
-    password: '',
-    aadhar: null,
-    license: null,
-    employerId: null,
-    healthHistory: '',
+    name: "",
+    email: "",
+    mobile: "",
+    password: "",
+    aadhar: "",
+    license: "",
+    employerId: "",
+    healthHistory: "",
+    ambulanceNumber: "",
   });
   const [errors, setErrors] = useState({});
+
+  const handleSubmit = async (event) => {
+    event.preventDefault(); // Prevent form from reloading the page
+
+    try {
+      if (selectedOption === "driver") {
+        // Reference to Firestore collection
+        const docRef = await addDoc(collection(db, "drivers"), {
+          name: formData.name,
+          email: formData.email,
+          mobile: formData.mobile,
+          password: formData.password, // Hash this in a real-world scenario
+          aadhar: formData.aadhar || "",
+          license: formData.license || "",
+          employerId: formData.employerId || "",
+          status: "N",
+          lat: "",
+          long: "",
+          ambulanceNumber: formData.ambulanceNumber || "",
+          timestamp: new Date(),
+        });
+
+        console.log("Document written with ID: ", docRef.id);
+        alert("Driver registered successfully!");
+      } else if (selectedOption === "user") {
+        // Reference to Firestore collection
+        const docRef = await addDoc(collection(db, "users"), {
+          name: formData.name,
+          email: formData.email,
+          mobile: formData.mobile,
+          password: formData.password, // Hash this in a real-world scenario
+          healthHistory: formData.healthHistory || "",
+          lat: "",
+          long: "",
+          timestamp: new Date(),
+        });
+
+        console.log("User registered with ID: ", docRef.id);
+        alert("User registered successfully!");
+      }
+    } catch (error) {
+      console.error("Error adding document: ", error);
+      alert("Error registering driver");
+    }
+  };
 
   const handleOptionChange = (value) => {
     setSelectedOption(value);
     setErrors({});
     setFormData({
-      name: '',
-      email: '',
-      mobile: '',
-      password: '',
+      name: "",
+      email: "",
+      mobile: "",
+      password: "",
       aadhar: null,
       license: null,
       employerId: null,
-      healthHistory: '',
+      healthHistory: "",
     });
   };
 
@@ -45,37 +92,37 @@ const Register = () => {
     const newErrors = {};
 
     if (!formData.name.trim()) {
-      newErrors.name = 'Name is required';
+      newErrors.name = "Name is required";
       isValid = false;
     }
 
     if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Invalid email format';
+      newErrors.email = "Invalid email format";
       isValid = false;
     }
 
     if (!/^\d{10}$/.test(formData.mobile)) {
-      newErrors.mobile = 'Mobile number must be 10 digits';
+      newErrors.mobile = "Mobile number must be 10 digits";
       isValid = false;
     }
 
     if (formData.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters';
+      newErrors.password = "Password must be at least 6 characters";
       isValid = false;
     }
 
-    if (selectedOption === 'driver' && !formData.aadhar) {
-      newErrors.aadhar = 'Aadhar Card Photo is required';
+    if (selectedOption === "driver" && !formData.aadhar) {
+      newErrors.aadhar = "Aadhar Card Photo is required";
       isValid = false;
     }
 
-    if (selectedOption === 'driver' && !formData.license) {
-      newErrors.license = 'Driving License is required';
+    if (selectedOption === "driver" && !formData.license) {
+      newErrors.license = "Driving License is required";
       isValid = false;
     }
 
-    if (selectedOption === 'driver' && !formData.employerId) {
-      newErrors.employerId = 'Employer ID Photo is required';
+    if (selectedOption === "driver" && !formData.employerId) {
+      newErrors.employerId = "Employer ID Photo is required";
       isValid = false;
     }
 
@@ -83,17 +130,17 @@ const Register = () => {
     return isValid;
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (validateForm()) {
-      console.log('Form submitted successfully', formData);
-      // Add form submission logic here
-    }
-  };
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   if (validateForm()) {
+  //     console.log('Form submitted successfully', formData);
+  //     // Add form submission logic here
+  //   }
+  // };
 
   const renderFormContent = () => {
     switch (selectedOption) {
-      case 'driver':
+      case "driver":
         return (
           <>
             <label style={styles.labelStyle}>Name:</label>
@@ -129,6 +176,15 @@ const Register = () => {
             />
             {errors.mobile && <span style={styles.error}>{errors.mobile}</span>}
 
+            <label style={styles.labelStyle}>Ambulance Number:</label>
+            <input
+              type="text"
+              name="ambulanceNumber"
+              value={formData.ambulanceNumber}
+              onChange={handleInputChange}
+              placeholder="Enter your ambulance number"
+              style={styles.input}
+            />
             <label style={styles.labelStyle}>Password:</label>
             <input
               type="password"
@@ -138,37 +194,56 @@ const Register = () => {
               placeholder="Enter your password"
               style={styles.input}
             />
-            {errors.password && <span style={styles.error}>{errors.password}</span>}
+            {errors.password && (
+              <span style={styles.error}>{errors.password}</span>
+            )}
 
-            <label style={styles.labelStyle}>Aadhar Card Photo:</label>
+            <label style={styles.labelStyle}>
+              Aadhar Card (Reference Link or Number):
+            </label>
             <input
-              type="file"
+              type="text"
               name="aadhar"
-              onChange={handleFileChange}
+              value={formData.aadhar}
+              onChange={handleInputChange}
+              placeholder="Enter Aadhar reference link or number"
               style={styles.input}
             />
             {errors.aadhar && <span style={styles.error}>{errors.aadhar}</span>}
 
-            <label style={styles.labelStyle}>Driving License:</label>
+            <label style={styles.labelStyle}>
+              Driving License (Reference Link or Number):
+            </label>
             <input
-              type="file"
+              type="text"
               name="license"
-              onChange={handleFileChange}
+              value={formData.license}
+              onChange={handleInputChange}
+              placeholder="Enter Driving License reference link or number"
               style={styles.input}
             />
-            {errors.license && <span style={styles.error}>{errors.license}</span>}
+            {errors.license && (
+              <span style={styles.error}>{errors.license}</span>
+            )}
 
-            <label style={styles.labelStyle}>Employer ID Photo:</label>
+            <label style={styles.labelStyle}>
+              Employer ID (Reference Link or Number):
+            </label>
             <input
-              type="file"
+              type="text"
               name="employerId"
-              onChange={handleFileChange}
+              value={formData.employerId}
+              onChange={handleInputChange}
+              placeholder="Enter Employer ID reference link or number"
               style={styles.input}
             />
-            {errors.employerId && <span style={styles.error}>{errors.employerId}</span>}
+            {errors.employerId && (
+              <span style={styles.error}>{errors.employerId}</span>
+            )}
           </>
         );
-      case 'user':
+
+      case "user":
         return (
           <>
             <label style={styles.labelStyle}>Name:</label>
@@ -213,7 +288,9 @@ const Register = () => {
               placeholder="Enter your password"
               style={styles.input}
             />
-            {errors.password && <span style={styles.error}>{errors.password}</span>}
+            {errors.password && (
+              <span style={styles.error}>{errors.password}</span>
+            )}
 
             <label style={styles.labelStyle}>Health History:</label>
             <textarea
@@ -221,11 +298,11 @@ const Register = () => {
               value={formData.healthHistory}
               onChange={handleInputChange}
               placeholder="Enter any health history (e.g., allergies)"
-              style={{ ...styles.input, height: '80px' }}
+              style={{ ...styles.input, height: "80px" }}
             ></textarea>
           </>
         );
-      case 'emergency':
+      case "emergency":
         return (
           <>
             <label style={styles.labelStyle}>Mobile Number:</label>
@@ -255,30 +332,32 @@ const Register = () => {
             <button
               style={{
                 ...styles.toggleButton,
-                backgroundColor: selectedOption === 'driver' ? '#ff0000' : '#fff',
-                color: selectedOption === 'driver' ? '#fff' : '#ff0000',
+                backgroundColor:
+                  selectedOption === "driver" ? "#ff0000" : "#fff",
+                color: selectedOption === "driver" ? "#fff" : "#ff0000",
               }}
-              onClick={() => handleOptionChange('driver')}
+              onClick={() => handleOptionChange("driver")}
             >
               Driver Registration
             </button>
             <button
               style={{
                 ...styles.toggleButton,
-                backgroundColor: selectedOption === 'user' ? '#ff0000' : '#fff',
-                color: selectedOption === 'user' ? '#fff' : '#ff0000',
+                backgroundColor: selectedOption === "user" ? "#ff0000" : "#fff",
+                color: selectedOption === "user" ? "#fff" : "#ff0000",
               }}
-              onClick={() => handleOptionChange('user')}
+              onClick={() => handleOptionChange("user")}
             >
               User Registration
             </button>
             <button
               style={{
                 ...styles.toggleButton,
-                backgroundColor: selectedOption === 'emergency' ? '#ff0000' : '#fff',
-                color: selectedOption === 'emergency' ? '#fff' : '#ff0000',
+                backgroundColor:
+                  selectedOption === "emergency" ? "#ff0000" : "#fff",
+                color: selectedOption === "emergency" ? "#fff" : "#ff0000",
               }}
-              onClick={() => handleOptionChange('emergency')}
+              onClick={() => handleOptionChange("emergency")}
             >
               Emergency
             </button>
@@ -290,7 +369,7 @@ const Register = () => {
             </button>
           </form>
           <div style={styles.loginPrompt}>
-            <span style={{ color: '#ff0000' }}>Already registered?</span>
+            <span style={{ color: "#ff0000" }}>Already registered?</span>
             <a href="/login" style={styles.loginLink}>
               Login here
             </a>
@@ -304,82 +383,82 @@ const Register = () => {
 const styles = {
   container: {
     paddingTop: 20,
-    backgroundColor: '#fff',
-    color: '#900',
-    fontFamily: 'Roboto, sans-serif',
-    minHeight: '100vh',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "#fff",
+    color: "#900",
+    fontFamily: "Roboto, sans-serif",
+    minHeight: "100vh",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
   },
   labelStyle: {
-    color: '#ff0000',
+    color: "#ff0000",
   },
   error: {
-    color: '#ff0000',
-    fontSize: '12px',
-    marginTop: '-10px',
-    marginBottom: '10px',
+    color: "#ff0000",
+    fontSize: "12px",
+    marginTop: "-10px",
+    marginBottom: "10px",
   },
   formWrapper: {
-    backgroundColor: '#ffffff',
-    border: '1px solid #ff0000',
-    borderRadius: '10px',
-    padding: '30px',
-    width: '500px',
-    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+    backgroundColor: "#ffffff",
+    border: "1px solid #ff0000",
+    borderRadius: "10px",
+    padding: "30px",
+    width: "500px",
+    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
   },
   heading: {
-    color: '#ff0000',
-    textAlign: 'center',
-    marginBottom: '20px',
+    color: "#ff0000",
+    textAlign: "center",
+    marginBottom: "20px",
   },
   toggleGroup: {
-    display: 'flex',
-    marginBottom: '20px',
+    display: "flex",
+    marginBottom: "20px",
   },
   toggleButton: {
     flex: 1,
-    border: '1px solid #ff0000',
-    padding: '10px',
-    cursor: 'pointer',
-    fontSize: '14px',
-    textAlign: 'center',
+    border: "1px solid #ff0000",
+    padding: "10px",
+    cursor: "pointer",
+    fontSize: "14px",
+    textAlign: "center",
   },
   formContent: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '15px',
-    marginBottom: '20px',
+    display: "flex",
+    flexDirection: "column",
+    gap: "15px",
+    marginBottom: "20px",
   },
   input: {
-    border: '1px solid #ccc',
-    borderRadius: '8px',
-    padding: '10px',
-    fontSize: '14px',
-    width: '100%',
-    boxSizing: 'border-box',
-    color: '#000', // Ensuring text color is black
+    border: "1px solid #ccc",
+    borderRadius: "8px",
+    padding: "10px",
+    fontSize: "14px",
+    width: "100%",
+    boxSizing: "border-box",
+    color: "#000", // Ensuring text color is black
   },
   registerButton: {
-    backgroundColor: '#ff0000',
-    color: '#fff',
-    border: 'none',
-    padding: '12px 18px',
-    borderRadius: '8px',
-    cursor: 'pointer',
-    textAlign: 'center',
-    fontSize: '16px',
+    backgroundColor: "#ff0000",
+    color: "#fff",
+    border: "none",
+    padding: "12px 18px",
+    borderRadius: "8px",
+    cursor: "pointer",
+    textAlign: "center",
+    fontSize: "16px",
   },
   loginPrompt: {
-    marginTop: '20px',
-    textAlign: 'right',
-    color: '#ff0000',
+    marginTop: "20px",
+    textAlign: "right",
+    color: "#ff0000",
   },
   loginLink: {
-    color: '#ff0000',
-    textDecoration: 'none',
-    marginLeft: '5px',
+    color: "#ff0000",
+    textDecoration: "none",
+    marginLeft: "5px",
   },
 };
 
