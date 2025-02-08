@@ -11,6 +11,7 @@ import EmergencyHelpline from './pages/EmergencyHelpline';
 import DriverRequests from './pages/DriverRequests';
 import RidesHistory from './pages/RidesHistory';
 import PaymentHistory from './pages/PaymentHistory';
+import Quiz from './pages/Quiz';
 
 function App() {
   return (
@@ -43,6 +44,7 @@ function AppContent() {
           <Route path="/driver/requests" element={<DriverRequests />} />
           <Route path="/driver/rides-history" element={<RidesHistory />} />
           <Route path="/driver/payment-history" element={<PaymentHistory />} />
+          <Route path="/driver/quiz" element={<Quiz />} />
         </Routes>
       </main>
     </div>
