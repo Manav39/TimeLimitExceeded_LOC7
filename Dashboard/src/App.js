@@ -58,6 +58,7 @@ function AppContent() {
           <Route path="/driver/requests" element={<DriverRequests />} />
           <Route path="/driver/rides-history" element={<RidesHistory />} />
           <Route path="/driver/payment-history" element={<PaymentHistory />} />
+          <Route path="/driver/quiz" element={<Quiz />} />
         </Routes>
       </main>
     </div>

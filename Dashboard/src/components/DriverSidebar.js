@@ -21,6 +21,7 @@ const routes = [
     icon: CreditCard,
     path: "/driver/payment-history",
   },
+  { label: "Quiz Game", icon: CreditCard, path: "/driver/quiz" },
 ];
 
 function DriverSidebar() {
