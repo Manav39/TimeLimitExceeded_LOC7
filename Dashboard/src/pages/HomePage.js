@@ -1,373 +1,237 @@
-import { useCallback, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import styles from '../styles/HomePage.module.css';
-import { useToast } from "@chakra-ui/toast";
-
-
+import { Ambulance, MapPin, CreditCard, Hospital, Phone, Bell, Languages } from "lucide-react";
+import hero_img from "../images/hero_img.png";
+import Navbar from "./Navbar";
 
 const HomePage = () => {
-    const navigate = useNavigate();
-    // const {
-    //   account,
-    //   setAccount,
-    //   contract,
-    //   setContract,
-    //   provider,
-    //   setProvider,
-    //   userType,
-    //   setUserType,
-    // } = useVault();
-  
-    const [data, setdata] = useState({
-      address: "",
-      Balance: null,
-    });
-    const toast = useToast();
-  
-    // const getbalance = (address) => {
-    //   // Requesting balance method
-    //   window.ethereum
-    //     .request({
-    //       method: "eth_getBalance",
-    //       params: [address, "latest"],
-    //     })
-    //     .then((balance) => {
-    //       // Setting balance
-    //       setdata({
-    //         Balance: ethers.formatEther(balance),
-    //       });
-    //     });
-    // };
-  
-    // const accountChangeHandler = (account) => {
-    //   // Setting an address data
-    //   setdata({
-    //     address: account,
-    //   });
-  
-    //   // Setting a balance
-    //   getbalance(account);
-    // toast({
-    //   position: "top",
-    //   title: "Connected With Metamask Successfully",
-    //   status: "success",
-    //   duration: 1500,
-    //   isClosable: true,
-    // });
-    //   navigate("Dashboard", {
-    //     state: { address: data["address"], Balance: data["Balance"] },
-    //   });
-    // };
-  
-    const requestMetaMaskAccess = async () => {
-     
-    };
-  
-    const onLogoClick = useCallback(() => {
-      navigate("/");
-    }, [navigate]);
-  
-    const onExercisesClick = useCallback(() => {
-      const anchor = document.querySelector(
-        "[data-scroll-to='popularExercisesSection']"
-      );
-      if (anchor) {
-        anchor.scrollIntoView({ block: "start", behavior: "smooth" });
-      }
-    }, []);
-  
-    const onTrainers1Click = useCallback(() => {
-      const anchor = document.querySelector("[data-scroll-to='trainers']");
-      if (anchor) {
-        anchor.scrollIntoView({ block: "start", behavior: "smooth" });
-      }
-    }, []);
-  
-    const onPricingClick = useCallback(() => {
-      navigate("/");
-    }, [navigate]);
-  
-    const onButton1Click = useCallback(() => {
-      const anchor = document.querySelector(
-        "[data-scroll-to='popularExercisesSection']"
-      );
-      if (anchor) {
-        anchor.scrollIntoView({ block: "start", behavior: "smooth" });
-      }
-    }, []);
-  
-    const subscribeToEmail = () => {};
-  
-    return (
-      <div className={styles.fitnesslandingpage}>
-        <div className={styles.navbar}>
-          <div className={styles.nav}>
-            <button className={styles.logo} onClick={onLogoClick}>
-              E-Vault
-            </button>
-            <div className={styles.menuright}>
-              <div className={styles.menulinks}>
-                <button className={styles.exercises} onClick={onPricingClick}>
-                  PRICING
-                </button>
-                <button className={styles.login} onClick={requestMetaMaskAccess}>
-                  LOGIN WITH METAMASK
-                </button>
+  return (
+    <div style={styles.container}>
+      
+      <Navbar/>
+      <main>
+        <section style={styles.hero}>
+          <div style={styles.heroContent}>
+            <div style={styles.heroText}>
+              <h2 style={styles.heroTitle}>"Because Every Second      Counts"</h2>
+              <p style={styles.heroSubtitle}>
+                Fast, reliable ambulance service at your fingertips
+              </p>
+              <div style={styles.bookingForm}>
+                <button style={styles.button}>Book Now</button>
               </div>
-              <button className={styles.hamburgerIcon}>
-                <img className={styles.group2Icon} alt="" src="/group2.svg" />
-              </button>
             </div>
+            <div style={styles.heroImage}></div>
           </div>
+        </section>
+
+        <section style={styles.features}>
+          <h3 style={styles.sectionTitle}>Key Features</h3>
+          <div style={styles.featureGrid}>
+            <FeatureCard
+              icon={<Ambulance size={40} color="#ff0000" />}
+              title="Real-time Tracking"
+              description="Track your ambulance in real-time with GPS integration"
+            />
+            <FeatureCard
+              icon={<MapPin size={40} color="#ff0000" />}
+              title="Nearest Hospital Finder"
+              description="Quickly locate the nearest hospitals based on your location"
+            />
+            <FeatureCard
+              icon={<CreditCard size={40} color="#ff0000" />}
+              title="Easy Payments"
+              description="Secure and hassle-free payment options including UPI and cards"
+            />
+            <FeatureCard
+              icon={<Hospital size={40} color="#ff0000" />}
+              title="Hospital Information"
+              description="Get details about nearby hospitals and available services"
+            />
+            <FeatureCard
+              icon={<Bell size={40} color="#ff0000" />}
+              title="Push Notifications"
+              description="Receive real-time alerts about your ambulance status"
+            />
+            <FeatureCard
+              icon={<Languages size={40} color="#ff0000" />}
+              title="Multilingual Support"
+              description="Use the app in your preferred regional language"
+            />
+          </div>
+        </section>
+
+        <section style={styles.helpline}>
+          <h3 style={styles.sectionTitle}>Emergency Helpline</h3>
+          <p style={styles.helplineText}>In case of extreme emergencies, call our 24/7 helpline</p>
+          <div style={styles.helplineNumber}>
+            <Phone size={24} color="#ff0000" />
+            <span>108</span>
+          </div>
+        </section>
+      </main>
+
+      <footer style={styles.footer}>
+        <p>&copy; 2025 Smart Ambulance Booking System. All rights reserved.</p>
+        <div>
+          <a href="/privacy" style={styles.footerLink}>Privacy Policy</a>
+          <a href="/terms" style={styles.footerLink}>Terms of Service</a>
         </div>
-        <div className={styles.herosection}>
-          <div className={styles.herotext}>
-            <div className={styles.herocta}>
-              <div className={styles.title}>
-                <p className={styles.cardio}>{`Legacy `}</p>
-                <p className={styles.cardio} style={{paddingTop:"30px"}}>- Vault</p>
-              </div>
-              <div className={styles.subtitle}>
-              A secure, decentralized vault for managing wills and safeguarding your legacy with trust and transparency.
-              </div>
-              <div className={styles.buttonrow}>
-                <button className={styles.button} onClick={requestMetaMaskAccess}>
-                  <div className={styles.getStarted}>Get Started</div>
-                </button>
-                <button
-                  className={styles.button1}
-                  onClick={requestMetaMaskAccess}
-                >
-                  <div className={styles.getStarted}>Preview</div>
-                </button>
-              </div>
-            </div>
-          </div>
-          <img className={styles.heroimageIcon} alt="" src="/documents.jpg" />
-        </div>
-        <div
-          className={styles.popularexercisessection}
-          data-scroll-to="popularExercisesSection"
-        >
-          <div className={styles.popularexercises}>
-            <div className={styles.title1}>
-              <div className={styles.popularExercises}>Features</div>
-            </div>
+      </footer>
+    </div>
+  );
+};
+
+const FeatureCard = ({ icon, title, description }) => {
+  return (
+    <div style={styles.featureCard}>
+      <div style={styles.featureIcon}>{icon}</div>
+      <h4 style={styles.featureTitle}>{title}</h4>
+      <p style={styles.featureDescription}>{description}</p>
+    </div>
+  );
+};
+
+const styles = {
+  container: {
+    width: "100vw",
+    fontFamily: "'Roboto', sans-serif",
+    minHeight: "100vh",
+    display: "flex",
+    flexDirection: "column",
+    backgroundColor: "white",
+    margin: 0,
+    padding: 0,
+  },
   
-            <div className={styles.exercisecards}>
-              <div className={styles.column1}>
-                <div className={styles.exercisecard}>
-                  <img
-                    className={styles.cardimageIcon}
-                    alt=""
-                    src="/blockchain.jpg"
-                  />
-                  <div className={styles.text}>
-                    <div className={styles.titles}>
-                      <div className={styles.popularExercises}>
-                        Blockchain-Based Security
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className={styles.exercisecard}>
-                  <img className={styles.imageIcon} alt="" src="/interface.jpg" />
-                  <div className={styles.text}>
-                    <div className={styles.titles}>
-                      <div className={styles.popularExercises}>
-                        User-Friendly Interfaces
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-  
-              <div className={styles.column1}>
-                <div className={styles.exercisecard2}>
-                  <img className={styles.imageIcon} alt="" src="/privacy.jpg" />
-                  <div className={styles.text}>
-                    <div className={styles.titles}>
-                      <div className={styles.popularExercises}>
-                        Privacy and Confidentiality
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className={styles.exercisecard}>
-                  <img
-                    className={styles.imageIcon}
-                    alt=""
-                    src="/integration.jpg"
-                  />
-                  <div className={styles.text}>
-                    <div className={styles.titles}>
-                      <div className={styles.popularExercises}>
-                        Integration Capabilities
-                      </div>
-                      {/* <div
-                        className={styles.subtitles}
-                      >{`Feature 5 Description`}</div> */}
-                    </div>
-                  </div>
-                </div>
-              </div>
-  
-              <div className={styles.column1}>
-                <div className={styles.exercisecard2}>
-                  <img className={styles.imageIcon} alt="" src="/scalable.jpg" />
-                  <div className={styles.text}>
-                    <div className={styles.titles}>
-                      <div className={styles.popularExercises}>
-                        Scalability and Adaptability
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className={styles.exercisecard}>
-                  <img
-                    className={styles.imageIcon}
-                    alt=""
-                    src="/transparency.jpg"
-                  />
-                  <div className={styles.text}>
-                    <div className={styles.titles}>
-                      <div className={styles.popularExercises}>Transparency</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className={styles.trainers1} data-scroll-to="trainers">
-          <div className={styles.trainerscta}>
-            <div className={styles.ctaframe}>
-              <div className={styles.background} />
-              <div className={styles.title5}>
-                <h2 className={styles.workoutProgramMadeContainer}>
-                  <p className={styles.cardio}>Secure</p>
-                  <p className={styles.cardio}>E-Vault</p>
-                  <p className={styles.cardio}>Made</p>
-                  <p className={styles.cardio}>For You</p>
-                </h2>
-                <img className={styles.splashIcon} alt="" src="/splash.svg" />
-              </div>
-              <div className={styles.description}>
-                <div className={styles.loremIpsumDolor}>
-                A secure, decentralized vault for managing wills and safeguarding your legacy with trust and transparency.
-                </div>
-                <button
-                  className={styles.button2}
-                  onClick={requestMetaMaskAccess}
-                >
-                  <div className={styles.getStarted1}>Get Started</div>
-                </button>
-              </div>
-            </div>
-          </div>
-          <div className={styles.trainersimages}>
-            <div className={styles.desktop}>
-              <div className={styles.trainer3}>
-                <img className={styles.trainer3Child} alt="" src="/client.jpg" />
-                <div className={styles.samanthaWilliam}>Client</div>
-              </div>
-              <div className={styles.trainer2}>
-                <img className={styles.trainer3Child} alt="" src="/lawyer.jpg" />
-                <div className={styles.samanthaWilliam}>Lawyer</div>
-              </div>
-              <div className={styles.trainer11}>
-                <img className={styles.trainer1Child} alt="" src="/judge.jpg" />
-                <div className={styles.jonathanWise}>Judge</div>
-              </div>
-            </div>
-            <div className={styles.tablet}>
-              <div className={styles.trainer31}>
-                <img className={styles.trainer3Item} alt="" src="/judge.jpg" />
-                <div className={styles.karenSummer1}>Judge</div>
-              </div>
-              <div className={styles.trainer21}>
-                <img className={styles.trainer2Item} alt="" src="/lawyer.jpg" />
-                <div className={styles.jonathanWise1}>Lawyer</div>
-              </div>
-              <div className={styles.trainer12}>
-                <img className={styles.trainer1Item} alt="" src="/client.jpg" />
-                <div className={styles.samanthaWilliam1}>Client</div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className={styles.categoriessection}>
-          <div className={styles.popularexercises}>
-            <div className={styles.category}>
-              <div className={styles.div6}>01</div>
-              <div className={styles.action}>
-                <div className={styles.titles3}>
-                  <div className={styles.title6}>Login With Metamask</div>
-                </div>
-              </div>
-            </div>
-            <img className={styles.separatorIcon} alt="" src="/separator.svg" />
-            <div className={styles.category}>
-              <div className={styles.div6}>02</div>
-              <div className={styles.action}>
-                <div className={styles.titles3}>
-                  <div className={styles.title6}>Create A New Case</div>
-                  <div className={styles.courses}>some description</div>
-                </div>
-              </div>
-            </div>
-            <img className={styles.separatorIcon} alt="" src="/separator.svg" />
-            <div className={styles.category}>
-              <div className={styles.div6}>03</div>
-              <div className={styles.action}>
-                <div className={styles.titles3}>
-                  <div className={styles.title6}>Add Stakeholders</div>
-                  <div className={styles.courses}>some description</div>
-                </div>
-              </div>
-            </div>
-            <img className={styles.separatorIcon} alt="" src="/separator.svg" />
-            <div className={styles.category}>
-              <div className={styles.div6}>04</div>
-              <div className={styles.action}>
-                <div className={styles.titles3}>
-                  <div className={styles.title6}>Upload Documents</div>
-                  <div className={styles.courses}>some description</div>
-                </div>
-              </div>
-            </div>
-            <img className={styles.separatorIcon} alt="" src="/separator.svg" />
-            <div className={styles.category}>
-              <div className={styles.div6}>05</div>
-              <div className={styles.action}>
-                <div className={styles.titles3}>
-                  <div className={styles.title6}>Share Documents Securely</div>
-                  <div className={styles.courses}>some description</div>
-                </div>
-              </div>
-            </div>
-            <img className={styles.separatorIcon} alt="" src="/separator.svg" />
-          </div>
-        </div>
-        <div className={styles.subscribe}>
-          <div className={styles.subscribeform}>
-            <div className={styles.title11}>Connect With Us</div>
-            <form className={styles.form} id="formID">
-              <input className={styles.input} placeholder="Email" type="text" />
-              <button
-                className={styles.button3}
-                type="submit"
-                form="formID"
-                onClick={subscribeToEmail}
-              >
-                <div className={styles.getStarted1}>Subscribe</div>
-              </button>
-            </form>
-          </div>
-        </div>
-      </div>
-    );
-  };
-  
-  export default HomePage;
-  
+  hero: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: "6rem 1rem",
+    backgroundColor: "#f9f9f9",
+  },
+  heroContent: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    maxWidth: "1200px",
+    width: "100%",
+  },
+  heroText: {
+    flex: 1,
+    marginRight: "2rem",
+    color: "#333",
+  },
+  heroTitle: {
+    fontSize: "3rem",
+    fontWeight: "700",
+    marginBottom: "1rem",
+    fontFamily: "'Montserrat', sans-serif",
+    fontStyle:"italic",
+  },
+  heroSubtitle: {
+    fontSize: "1.5rem",
+    fontWeight: "400",
+    marginBottom: "2rem",
+    color: "#555",
+  },
+  bookingForm: {
+    display: "flex",
+    gap: "1rem",
+  },
+  heroImage: {
+    flex: 1,
+    height: "300px",
+    backgroundImage: `url(${hero_img})`,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    borderRadius: "8px",
+  },
+  button: {
+    padding: "0.75rem 1.5rem",
+    fontSize: "1rem",
+    backgroundColor: "#ff0000",
+    color: "white",
+    border: "none",
+    borderRadius: "6px",
+    cursor: "pointer",
+    fontWeight: "600",
+    fontFamily: "'Roboto', sans-serif",
+  },
+  features: {
+    padding: "4rem 1rem",
+    backgroundColor: "#fff",
+  },
+  sectionTitle: {
+    fontSize: "2.5rem",
+    textAlign: "center",
+    marginBottom: "2.5rem",
+    color: "#ff0000",
+    fontWeight: "700",
+    fontFamily: "'Montserrat', sans-serif",
+  },
+  featureGrid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(3, 1fr)",
+    gap: "2rem",
+    maxWidth: "1200px",
+    margin: "0 auto",
+  },
+  featureCard: {
+    backgroundColor: "#fff",
+    padding: "2rem",
+    borderRadius: "8px",
+    textAlign: "center",
+    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.15)",
+  },
+  featureIcon: {
+    marginBottom: "1rem",
+  },
+  featureTitle: {
+    fontSize: "1.5rem",
+    marginBottom: "0.5rem",
+    color: "#ff0000",
+    fontWeight: "600",
+    fontFamily: "'Roboto', sans-serif",
+  },
+  featureDescription: {
+    fontSize: "1rem",
+    color: "#333",
+    fontWeight: "400",
+  },
+
+  helpline: {
+    backgroundColor: "#ff0000",
+    color: "white",
+    padding: "4rem 1rem",
+    textAlign: "center",
+  },
+  helplineText: {
+    fontSize: "1.25rem",
+    marginBottom: "1rem",
+  },
+  helplineNumber: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "0.5rem",
+    fontSize: "2.5rem",
+    fontWeight: "bold",
+    marginTop: "1rem",
+  },
+  footer: {
+    backgroundColor: "#ff0000",
+    color: "white",
+    padding: "2rem 1rem",
+    textAlign: "center",
+    marginTop: "auto",
+  },
+  footerLink: {
+    color: "white",
+    textDecoration: "none",
+    margin: "0 0.5rem",
+  },
+}
+
+export default HomePage
+
