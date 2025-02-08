@@ -118,8 +118,9 @@ const Hospitals = () => {
         <button
           className="flex items-center bg-blue-600 text-white px-4 py-2 rounded shadow hover:bg-blue-700"
           onClick={() => window.location.reload()}
+          style={{backgroundColor:"#ff0000"}}
         >
-          <RefreshCcw className="h-4 w-4 mr-2" />
+          <RefreshCcw className="h-4 w-4 mr-2"  style={{color:"white"}}/>
           Refresh
         </button>
       </div>

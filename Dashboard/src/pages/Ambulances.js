@@ -160,7 +160,7 @@ const AmbulanceCard = ({
   <div className="p-4 border rounded-lg shadow-sm bg-white">
     <div className="flex justify-between items-center mb-4">
       <div className="flex items-center">
-        <AmbulanceIcon className="h-8 w-8 text-blue-600 mr-3" />
+        <AmbulanceIcon style={{color:"#ff0000"}} className="h-8 w-8 text-blue-600 mr-3" />
         <div>
           <h3 className="font-semibold text-lg">{name}</h3>
           <p className="text-sm text-gray-500">
