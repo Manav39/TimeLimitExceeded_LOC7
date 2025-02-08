@@ -10,6 +10,8 @@ import Contracts from './pages/Contracts';
 import Transactions from './pages/Transactions';
 import Settings from './pages/Settings';
 import HomePage from './pages/HomePage';
+import Ambulances from './pages/Ambulances';
+import Hospitals from './pages/Hospitals';
 
 function App() {
   return (
@@ -30,14 +32,16 @@ function AppContent() {
         <Routes>
           <Route path="/" element={<Dashboard />} />
 
-          <Route path="/dashboard" element={<Dashboard />} />
+          {/* <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/wills" element={<Wills />} />
           <Route path="/beneficiaries" element={<Beneficiaries />} />
           <Route path="/documents" element={<Documents />} />
           <Route path="/assets" element={<Assets />} />
           <Route path="/contracts" element={<Contracts />} />
           <Route path="/transactions" element={<Transactions />} />
-          <Route path="/settings" element={<Settings />} />
+          <Route path="/settings" element={<Settings />} /> */}
+          <Route path='/ambulance' element={<Ambulances />} />
+          <Route path="/hospitals" element={<Hospitals />} />
         </Routes>
       </main>
     </div>
