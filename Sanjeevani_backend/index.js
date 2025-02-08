@@ -1,7 +1,11 @@
 const express = require("express");
 const twilio = require("twilio");
 const bodyParser = require("body-parser");
+const db = require("./firebase-config");
 require("dotenv").config();
+const driverRoutes = require("./routes/driverRoutes");
+const userRoutes = require("./routes/userRoutes");
+const hospitalRoutes = require("./routes/hospitalRoutes");
 
 const app = express();
 app.use(bodyParser.json());
@@ -124,6 +128,11 @@ app.use((err, req, res, next) => {
     error: "Something went wrong!",
   });
 });
+
+app.use("/drivers", driverRoutes);
+
+app.use("/users", userRoutes);
+app.use("/hospitals", hospitalRoutes);
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
