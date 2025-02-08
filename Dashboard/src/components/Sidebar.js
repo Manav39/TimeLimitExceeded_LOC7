@@ -14,7 +14,7 @@ const routes = [
   // { label: 'Contracts', icon: Shield, path: '/contracts' },
   // { label: 'Settings', icon: Settings, path: '/settings' },
   { label: "Book Ambulance", icon: Ambulance, path: "/ambulance" },
-  { label: "Hospital Finder", icon: Hospital, path: "/hospital" },
+  { label: "Hospital Finder", icon: Hospital, path: "/hospitals" },
   { label: "Emergency Helpline", icon: PhoneCall, path: "/helpline" },
   { label: "Update Profile", icon: User, path: "/profile" },
 ];  

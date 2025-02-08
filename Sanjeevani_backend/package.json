@@ -3,6 +3,7 @@
     "body-parser": "^1.20.3",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "firebase-admin": "^13.1.0",
     "twilio": "^5.4.3"
   }
 }
