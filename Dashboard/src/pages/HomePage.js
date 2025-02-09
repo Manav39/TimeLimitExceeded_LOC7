@@ -1,9 +1,20 @@
 import React, { useEffect } from "react";
-import { Ambulance, MapPin, CreditCard, Hospital, Phone, Bell, Languages } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import {
+  Ambulance,
+  MapPin,
+  CreditCard,
+  Hospital,
+  Phone,
+  Bell,
+  Languages,
+} from "lucide-react";
 import hero_img from "../images/hero_img.png";
 import Navbar from "./Navbar";
 
 const HomePage = () => {
+  const { t } = useTranslation();
+
   useEffect(() => {
     const getLocation = () => {
       if ("geolocation" in navigator) {
@@ -15,18 +26,18 @@ const HomePage = () => {
           },
           (error) => {
             if (error.code === error.PERMISSION_DENIED) {
-              alert("❗ Location access is mandatory for the app to function properly.");
-              getLocation(); // Ask for permission again
+              alert(t("location_permission_alert"));
+              getLocation();
             }
           }
         );
       } else {
-        alert("Geolocation is not supported by your browser.");
+        alert(t("location_not_supported"));
       }
     };
 
     getLocation();
-  }, []);
+  }, [t]);
 
   return (
     <div style={styles.container}>
@@ -35,12 +46,10 @@ const HomePage = () => {
         <section style={styles.hero}>
           <div style={styles.heroContent}>
             <div style={styles.heroText}>
-              <h2 style={styles.heroTitle}>"Because Every Second Counts"</h2>
-              <p style={styles.heroSubtitle}>
-                Fast, reliable ambulance service at your fingertips
-              </p>
+              <h2 style={styles.heroTitle}>{t("home_tagline")}</h2>
+              <p style={styles.heroSubtitle}>{t("home_description")}</p>
               <div style={styles.bookingForm}>
-                <button style={styles.button}>Book Now</button>
+                <button style={styles.button}>{t("book_now")}</button>
               </div>
             </div>
             <div style={styles.heroImage}></div>
@@ -48,46 +57,44 @@ const HomePage = () => {
         </section>
 
         <section style={styles.features}>
-          <h3 style={styles.sectionTitle}>Key Features</h3>
+          <h3 style={styles.sectionTitle}>{t("key_features")}</h3>
           <div style={styles.featureGrid}>
             <FeatureCard
               icon={<Ambulance size={40} color="#ff0000" />}
-              title="Real-time Tracking"
-              description="Track your ambulance in real-time with GPS integration"
+              title={t("feature_realtime_tracking")}
+              description={t("feature_realtime_tracking_desc")}
             />
             <FeatureCard
               icon={<MapPin size={40} color="#ff0000" />}
-              title="Nearest Hospital Finder"
-              description="Quickly locate the nearest hospitals based on your location"
+              title={t("feature_hospital_finder")}
+              description={t("feature_hospital_finder_desc")}
             />
             <FeatureCard
               icon={<CreditCard size={40} color="#ff0000" />}
-              title="Easy Payments"
-              description="Secure and hassle-free payment options including UPI and cards"
+              title={t("feature_easy_payments")}
+              description={t("feature_easy_payments_desc")}
             />
             <FeatureCard
               icon={<Hospital size={40} color="#ff0000" />}
-              title="Hospital Information"
-              description="Get details about nearby hospitals and available services"
+              title={t("feature_hospital_info")}
+              description={t("feature_hospital_info_desc")}
             />
             <FeatureCard
               icon={<Bell size={40} color="#ff0000" />}
-              title="Push Notifications"
-              description="Receive real-time alerts about your ambulance status"
+              title={t("feature_notifications")}
+              description={t("feature_notifications_desc")}
             />
             <FeatureCard
               icon={<Languages size={40} color="#ff0000" />}
-              title="Multilingual Support"
-              description="Use the app in your preferred regional language"
+              title={t("feature_multilingual")}
+              description={t("feature_multilingual_desc")}
             />
           </div>
         </section>
 
         <section style={styles.helpline}>
-          <h3 style={styles.sectionTitle}>Emergency Helpline</h3>
-          <p style={styles.helplineText}>
-            In case of extreme emergencies, call our 24/7 helpline
-          </p>
+          <h3 style={styles.sectionTitle}>{t("emergency_helpline")}</h3>
+          <p style={styles.helplineText}>{t("emergency_helpline_desc")}</p>
           <div style={styles.helplineNumber}>
             <Phone size={24} color="#ff0000" />
             <span>108</span>
@@ -96,10 +103,14 @@ const HomePage = () => {
       </main>
 
       <footer style={styles.footer}>
-        <p>&copy; 2025 Smart Ambulance Booking System. All rights reserved.</p>
+        <p>{t("footer_rights")}</p>
         <div>
-          <a href="/privacy" style={styles.footerLink}>Privacy Policy</a>
-          <a href="/terms" style={styles.footerLink}>Terms of Service</a>
+          <a href="/privacy" style={styles.footerLink}>
+            {t("footer_privacy")}
+          </a>
+          <a href="/terms" style={styles.footerLink}>
+            {t("footer_terms")}
+          </a>
         </div>
       </footer>
     </div>
@@ -127,7 +138,7 @@ const styles = {
     margin: 0,
     padding: 0,
   },
-  
+
   hero: {
     display: "flex",
     alignItems: "center",
@@ -153,7 +164,7 @@ const styles = {
     fontWeight: "700",
     marginBottom: "1rem",
     fontFamily: "'Montserrat', sans-serif",
-    fontStyle:"italic",
+    fontStyle: "italic",
   },
   heroSubtitle: {
     fontSize: "1.5rem",
@@ -260,6 +271,6 @@ const styles = {
     textDecoration: "none",
     margin: "0 0.5rem",
   },
-}
+};
 
 export default HomePage;
