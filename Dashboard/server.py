@@ -1,5 +1,6 @@
 import os
 import requests
+import random
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from dotenv import load_dotenv
@@ -10,6 +11,8 @@ load_dotenv()
 
 app = Flask(__name__)
 CORS(app)
+
+otp_storage = {}
 
 GOOGLE_PLACES_API_KEY = os.getenv("GOOGLE_PLACES_API_KEY")
 
@@ -82,6 +85,64 @@ def send_sms():
         )
 
         return jsonify({"success": True, "message_sid": message.sid}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+### **🔹 Route: Send OTP**
+@app.route("/send-otp", methods=["POST"])
+def send_otp():
+    try:
+        data = request.json
+        phone_number = data.get("phone_number")
+
+        if not phone_number:
+            return jsonify({"error": "Phone number is required"}), 400
+
+        # Generate 4-digit OTP
+        otp = str(random.randint(1000, 9999))
+        otp_storage[phone_number] = otp  # Store OTP temporarily
+
+        # Send OTP via Twilio
+        message = client.messages.create(
+            body=f"Your OTP for verification is: {otp}",
+            from_=TWILIO_PHONE_NUMBER,
+            to=phone_number
+        )
+
+        return jsonify({"success": True, "message_sid": message.sid}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+### **🔹 Route: Verify OTP**
+@app.route("/verify-otp", methods=["POST"])
+def verify_otp():
+    try:
+        data = request.json
+        phone_number = data.get("phone_number")
+        entered_otp = data.get("otp")
+
+        if not phone_number or not entered_otp:
+            return jsonify({"error": "Phone number and OTP are required"}), 400
+
+        # Validate OTP
+        correct_otp = otp_storage.get(phone_number)
+
+        if correct_otp and entered_otp == correct_otp:
+            del otp_storage[phone_number]  # Remove OTP after successful verification
+
+            # Send Confirmation SMS
+            client.messages.create(
+                body="Your mobile number has been successfully verified!",
+                from_=TWILIO_PHONE_NUMBER,
+                to=phone_number
+            )
+
+            return jsonify({"success": True, "message": "OTP verified successfully"}), 200
+        else:
+            return jsonify({"error": "Invalid OTP"}), 400
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
