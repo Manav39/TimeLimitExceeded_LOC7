@@ -25,8 +25,6 @@ import { Buffer } from "buffer";
 import process from "process";
 window.Buffer = Buffer;
 window.process = process;
-import Profile from "./pages/Profile";
-import GovernmentPrograms from "./pages/GovernmentPrograms";
 
 function App() {
   return (
