@@ -29,7 +29,7 @@ function DriverSidebar() {
 
   // Fetch name and email from localStorage (fallback to default values if not found)
   const name = localStorage.getItem("userName") || "John Doe";
-  const email = localStorage.getItem("userEmail") || "john@example.com";
+  const email = localStorage.getItem("driverEmail") || "john@example.com";
 
   // Duty Status: On Duty / Off Duty
   const [isOnDuty, setIsOnDuty] = useState(

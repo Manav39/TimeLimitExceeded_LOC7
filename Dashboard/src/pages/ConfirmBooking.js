@@ -8,6 +8,7 @@ import {
   DirectionsRenderer,
   useLoadScript,
 } from "@react-google-maps/api";
+import Razorpay from "razorpay";
 
 const GOOGLE_MAPS_API = "AIzaSyCNw9GjD1I5pYYkCyl7omRtbRftzoftOCc";
 const libraries = ["places"];
@@ -33,6 +34,79 @@ const ConfirmBooking = () => {
     googleMapsApiKey: GOOGLE_MAPS_API,
     libraries,
   });
+
+  const loadRazorpay = () => {
+    return new Promise((resolve) => {
+      const script = document.createElement("script");
+      script.src = "https://checkout.razorpay.com/v1/checkout.js";
+      script.onload = () => {
+        resolve(true);
+      };
+      script.onerror = () => {
+        resolve(false);
+      };
+      document.body.appendChild(script);
+    });
+  };
+  
+  const handlePay = async (e) => {
+    e.preventDefault();
+  
+    // Load Razorpay dynamically
+    const razorpayLoaded = await loadRazorpay();
+    if (!razorpayLoaded) {
+      alert("Failed to load Razorpay. Please check your internet connection.");
+      return;
+    }
+  
+    // Fetch order details from backend
+    const response = await fetch("http://localhost:3000/pay", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        amount: 50000, // Amount in paise (₹500)
+        currency: "INR",
+      }),
+    });
+  
+    const order = await response.json();
+  
+    if (!order.id) {
+      alert("Failed to create order. Please try again.");
+      return;
+    }
+  
+    var options = {
+      key: "rzp_test_RCqZF0EIXUQt7G", // Razorpay Test Key
+      amount: order.amount,
+      currency: order.currency,
+      name: "Ambulance Booking",
+      description: "Ambulance Charge",
+      image: "https://img.icons8.com/color/48/000000/ambulance.png",
+      order_id: order.id,
+      handler: function (res) {
+        alert("Payment Successful! Payment ID: " + res.razorpay_payment_id);
+        window.location.reload();
+      },
+      prefill: {
+        name: "User",
+        email: "user@example.com",
+        contact: "9876543210",
+      },
+      theme: {
+        color: "#ff0000",
+      },
+    };
+  
+    var rzp1 = new window.Razorpay(options); // Ensure `window.Razorpay` is used
+    rzp1.on("payment.failed", function (res) {
+      alert("Payment Failed: " + res.error.description);
+    });
+  
+    rzp1.open();
+  };
 
   // Fetch ride confirmation status from Firestore
   useEffect(() => {
@@ -106,7 +180,7 @@ const ConfirmBooking = () => {
           ) : (
             <button
               className="w-full p-3 mt-30 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700"
-              onClick={() => alert("Redirecting to Payment")}
+              onClick={handlePay}
             >
               Make Payment
             </button>
