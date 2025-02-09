@@ -18,6 +18,8 @@ import RidesHistory from "./pages/RidesHistory";
 import PaymentHistory from "./pages/PaymentHistory";
 import ConfirmBooking from "./pages/ConfirmBooking";
 import Quiz from "./pages/Quiz";
+import Profile from "./pages/Profile";
+import GovernmentPrograms from "./pages/GovernmentPrograms";
 
 function App() {
   return (
