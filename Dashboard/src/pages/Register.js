@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "./Navbar";
 import { db } from "../firebase";
 import { addDoc, collection } from "firebase/firestore";
@@ -14,6 +14,8 @@ const Register = () => {
     employerId: "",
     healthHistory: "",
     ambulanceNumber: "",
+    ambulanceType: "Private",
+    category: "Normal",
   });
   const [errors, setErrors] = useState({});
 
@@ -85,10 +87,79 @@ const Register = () => {
     return isValid;
   };
 
-  const handleSubmit = async(e) => {
+  const addAmbulanceDrivers = async () => {
+    const drivers = [
+      {
+        name: "Driver 1",
+        email: "driver1@example.com",
+        mobile: "9876543200",
+        password: "securepassword123",
+        aadhar: "1234-5678-9000",
+        license: "LIC0001",
+        employerId: "EMP0001",
+        status: "A",
+        lat: 19.079,
+        long: 72.8693,
+        ambulanceNumber: "AMB0001",
+        ambulanceType: "Private",
+        category: "Normal",
+        timestamp: new Date(),
+      },
+      {
+        name: "Driver 2",
+        email: "driver2@example.com",
+        mobile: "9876543201",
+        password: "securepassword123",
+        aadhar: "1234-5678-9001",
+        license: "LIC0002",
+        employerId: "EMP0002",
+        status: "A",
+        lat: 19.0743,
+        long: 72.874,
+        ambulanceNumber: "AMB0002",
+        ambulanceType: "Government",
+        category: "Oxygen",
+        timestamp: new Date(),
+      },
+      {
+        name: "Driver 3",
+        email: "driver3@example.com",
+        mobile: "9876543202",
+        password: "securepassword123",
+        aadhar: "1234-5678-9002",
+        license: "LIC0003",
+        employerId: "EMP0003",
+        status: "A",
+        lat: 19.0837,
+        long: 72.8823,
+        ambulanceNumber: "AMB0003",
+        ambulanceType: "Government",
+        category: "Dead Body",
+        timestamp: new Date(),
+      },
+      // ... Add remaining 7 records
+    ];
+
+    try {
+      const promises = drivers.map(async (driver) => {
+        await addDoc(collection(db, "drivers"), driver);
+      });
+
+      await Promise.all(promises);
+      console.log("All ambulance drivers added successfully!");
+    } catch (error) {
+      console.error("Error adding ambulance drivers:", error);
+    }
+  };
+
+  useEffect(() => {
+    //addAmbulanceDrivers();
+  }, []);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-      if (validateForm()) {
-        e.preventDefault(); // Prevent form from reloading the page
+    if (validateForm()) {
+      e.preventDefault(); // Prevent form from reloading the page
 
       try {
         if (selectedOption === "driver") {
@@ -97,14 +168,16 @@ const Register = () => {
             name: formData.name,
             email: formData.email,
             mobile: formData.mobile,
-            password: formData.password, // Hash this in a real-world scenario
+            password: formData.password,
             aadhar: formData.aadhar || "",
             license: formData.license || "",
             employerId: formData.employerId || "",
-            status: "N",
-            lat: "",
-            long: "",
+            status: "A",
+            lat: localStorage.getItem("userLatitude"),
+            long: localStorage.getItem("userLongitude"),
             ambulanceNumber: formData.ambulanceNumber || "",
+            ambulanceType: formData.ambulanceType,
+            category: formData.category,
             timestamp: new Date(),
           });
 
@@ -220,6 +293,32 @@ const Register = () => {
             {errors.license && (
               <span style={styles.error}>{errors.license}</span>
             )}
+
+            {/* New Dropdown for Ambulance Type */}
+            <label style={styles.labelStyle}>Ambulance Type:</label>
+            <select
+              name="ambulanceType"
+              value={formData.ambulanceType}
+              onChange={handleInputChange}
+              style={styles.input}
+            >
+              <option value="Private">Private</option>
+              <option value="Government">Government</option>
+            </select>
+
+            {/* New Dropdown for Category */}
+            <label style={styles.labelStyle}>Category:</label>
+            <select
+              name="category"
+              value={formData.category}
+              onChange={handleInputChange}
+              style={styles.input}
+            >
+              <option value="Normal">Normal</option>
+              <option value="Oxygen">Oxygen</option>
+              <option value="ICU">ICU</option>
+              <option value="Dead Body">Dead Body</option>
+            </select>
 
             <label style={styles.labelStyle}>
               Employer ID (Reference Link or Number):
