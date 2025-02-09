@@ -13,6 +13,13 @@ import { useNavigate } from "react-router-dom";
 const API_KEY = process.env.REACT_APP_GOOGLE_PLACES_API_KEY;
 const latitude = 19.1072258;
 const longitude = 72.8372432;
+const hospitalImages = [
+  "https://th.bing.com/th/id/OIP.Ie2QgToJYsLdNPyn5_o96QHaFr?rs=1&pid=ImgDetMain",  
+  "https://wallpaperaccess.com/full/4113244.jpg",
+  "https://th.bing.com/th/id/R.631cb60dc3126c0daee552dff2020753?rik=9FYEMdiyo%2faxaA&riu=http%3a%2f%2fupload.wikimedia.org%2fwikipedia%2fcommons%2f8%2f8a%2fNationwide_Childrens_Hospital%2c_Exterior_from_Fragrance_Maze%2c_May_2013.jpg&ehk=CgubPHMq4mvuTvJ5b%2bNaUJdf9J7nJLYzHWrYAOXef%2bo%3d&risl=1&pid=ImgRaw&r=0",  
+  "https://th.bing.com/th/id/OIP.gRGkO9mkKSSZMIPNsCnLuwHaKR?w=577&h=800&rs=1&pid=ImgDetMain",
+]; // Added image URLs here
+
 const DEFAULT_HOSPITAL_IMAGE =
   "https://www.kokilabenhospital.com/images/hospital1.png"; // Fallback image
 
@@ -30,8 +37,10 @@ const HospitalCard = ({
 }) => {
   const navigate = useNavigate();
 
-  // Construct hospital image URL (Use fallback if not available)
-  const photoUrl = DEFAULT_HOSPITAL_IMAGE;
+  // Function to pick a random hospital image
+  const randomImage = hospitalImages[Math.floor(Math.random() * hospitalImages.length)];
+
+  console.log("img,..", randomImage);
 
   // Function to navigate to the Ambulance page with source and destination
   const handleNavigateToAmbulance = () => {
@@ -44,9 +53,9 @@ const HospitalCard = ({
     <div className="p-4 border rounded-lg shadow-sm flex flex-col min-h-[460px]">
       {/* Hospital Image */}
       <img
-        src={photoUrl}
+        src={randomImage}
         alt={name}
-        className="w-full h-40 object-contain  rounded-lg mb-3"
+        className="w-full h-40 object-contain rounded-lg mb-3"
       />
 
       {/* Header */}
