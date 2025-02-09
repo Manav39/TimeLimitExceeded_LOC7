@@ -16,8 +16,12 @@ const Register = () => {
     ambulanceNumber: "",
     ambulanceType: "Private",
     category: "Normal",
+    otp: "",
   });
   const [errors, setErrors] = useState({});
+  const [otpSent, setOtpSent] = useState(false);
+  const [generatedOtp, setGeneratedOtp] = useState("");
+
 
   const handleOptionChange = (value) => {
     setSelectedOption(value);
@@ -31,11 +35,73 @@ const Register = () => {
       license: null,
       employerId: null,
       healthHistory: "",
+      otp: "",
     });
+  };
+
+  const generateOtp = () => {
+    return Math.floor(1000 + Math.random() * 9000).toString();
+  };
+
+   // Function to send OTP via Twilio
+   const sendOtp = async () => {
+    // if (!validateForm()) return;
+
+    const otp = generateOtp();
+    setGeneratedOtp(otp);
+    setOtpSent(true);
+
+
+    try {
+      const response = await fetch("http://127.0.0.1:5000/send-sms", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          phone_number: `+91${formData.mobile}`,
+          message: `Your OTP for emergency verification is: ${otp}`,
+        }),
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        alert("OTP sent successfully!");
+      } else {
+        alert("Failed to send OTP. Try again.");
+      }
+    } catch (error) {
+      console.error("Error sending OTP:", error);
+    }
+  };
+
+  // Function to verify OTP
+  const verifyOtp = async () => {
+    if (formData.otp !== generatedOtp) {
+      alert("Invalid OTP. Please try again.");
+      return;
+    }
+
+    alert("OTP Verified Successfully!");
+
+    // Send Emergency Confirmation Message via Twilio
+    try {
+      await fetch("http://127.0.0.1:5000/send-sms", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          phone_number: `+91${formData.mobile}`,
+          message: "🚑 Your emergency request has been confirmed. Help is on the way! Kindly contact the driver Mr. Raj Singh - +918369456359",
+        }),
+      });
+
+      alert("Emergency confirmation sent successfully!");
+    } catch (error) {
+      console.error("Error sending confirmation:", error);
+    }
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    console.log(name, value);
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -409,6 +475,36 @@ const Register = () => {
               style={styles.input}
             />
             {errors.mobile && <span style={styles.error}>{errors.mobile}</span>}
+
+            {/* OTP Section */}
+            {otpSent ? (
+              <>
+                <label style={styles.labelStyle}>Enter OTP:</label>
+                <input
+                  type="text"
+                  name="otp"
+                  value={formData.otp}
+                  onChange={handleInputChange}
+                  placeholder="Enter 4-digit OTP"
+                  style={styles.input}
+                />
+                <button
+                  type="button"
+                  style={styles.verifyButton}
+                  onClick={verifyOtp}
+                >
+                  Verify OTP
+                </button>
+              </>
+            ) : (
+              <button
+                type="button"
+                style={styles.sendOtpButton}
+                onClick={sendOtp}
+              >
+                Send OTP
+              </button>
+            )}
           </>
         );
       default:
