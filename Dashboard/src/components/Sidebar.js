@@ -3,11 +3,14 @@ import { Link, useLocation } from 'react-router-dom';
 import { Shield, Bell, Ambulance, Hospital, User } from 'lucide-react';
 import Button from './ui/Button';
 import Avatar from './ui/Avatar';
+import { FaProjectDiagram } from 'react-icons/fa';
 
 const routes = [
   { label: "Book Ambulance", icon: Ambulance, path: "/ambulance" },
   { label: "Hospital Finder", icon: Hospital, path: "/hospitals" },
+  { label: "Government Programs", icon: FaProjectDiagram, path: "/governmentprograms" },
   { label: "Update Profile", icon: User, path: "/profile" },
+  
 ];
 
 function Sidebar() {
