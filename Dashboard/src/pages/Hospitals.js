@@ -14,7 +14,7 @@ const API_KEY = process.env.REACT_APP_GOOGLE_PLACES_API_KEY;
 const latitude = 19.1072258;
 const longitude = 72.8372432;
 const DEFAULT_HOSPITAL_IMAGE =
-  "https://via.placeholder.com/400x200?text=Hospital"; // Fallback image
+  "https://www.kokilabenhospital.com/images/hospital1.png"; // Fallback image
 
 const HospitalCard = ({
   name,
@@ -31,9 +31,7 @@ const HospitalCard = ({
   const navigate = useNavigate();
 
   // Construct hospital image URL (Use fallback if not available)
-  const photoUrl = photoRef
-    ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=${photoRef}&key=${API_KEY}`
-    : DEFAULT_HOSPITAL_IMAGE;
+  const photoUrl = DEFAULT_HOSPITAL_IMAGE;
 
   // Function to navigate to the Ambulance page with source and destination
   const handleNavigateToAmbulance = () => {
@@ -48,7 +46,7 @@ const HospitalCard = ({
       <img
         src={photoUrl}
         alt={name}
-        className="w-full h-40 object-cover rounded-lg mb-3"
+        className="w-full h-40 object-contain  rounded-lg mb-3"
       />
 
       {/* Header */}
