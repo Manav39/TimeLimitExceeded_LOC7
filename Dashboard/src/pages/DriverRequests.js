@@ -19,7 +19,11 @@ const DriverRequests = () => {
     const fetchRequests = async () => {
       if (!driverEmail) return;
 
-      const q = query(collection(db, "rides"), where("confirm", "==", "No"));
+      const q = query(
+        collection(db, "rides"),
+        where("confirm", "==", "No"),
+        where("email", "==", driverEmail)
+      );
       const querySnapshot = await getDocs(q);
 
       const rideRequests = querySnapshot.docs.map((doc) => ({
