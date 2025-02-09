@@ -223,7 +223,7 @@ const ConfirmBooking = () => {
               className={`w-full p-3 mt-30 ${
                 paymentCompleted
                   ? "bg-gray-500"
-                  : "bg-green-600 hover:bg-green-700"
+                  : "bg-red-500 hover:bg-green-700"
               } text-white font-semibold rounded-lg`}
               onClick={handlePay}
               disabled={paymentCompleted} // Disable button after successful payment
