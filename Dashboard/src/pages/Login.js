@@ -36,12 +36,14 @@ const Login = () => {
           if (userData.password === password) {
             isAuthenticated = true;
             alert(`Login successful as ${selectedOption}`);
+
             localStorage.setItem("userRole", selectedOption);
-            localStorage.setItem("userEmail", email);
-            if(collectionName === "drivers") {
+
+            if (collectionName === "drivers") {
+              localStorage.setItem("driverEmail", email);
               navigate("/driver/requests");
-            }
-            else {
+            } else {
+              localStorage.setItem("userEmail", email);
               navigate("/ambulance");
             }
             // Redirect logic can be added here (e.g., navigate to dashboard)
