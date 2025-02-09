@@ -3,6 +3,7 @@ import requests
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from dotenv import load_dotenv
+from twilio.rest import Client
 
 # Load environment variables
 load_dotenv()
@@ -11,6 +12,13 @@ app = Flask(__name__)
 CORS(app)
 
 GOOGLE_PLACES_API_KEY = os.getenv("GOOGLE_PLACES_API_KEY")
+
+TWILIO_ACCOUNT_SID = os.getenv("TWILIO_ACCOUNT_SID")
+TWILIO_AUTH_TOKEN = os.getenv("TWILIO_AUTH_TOKEN")
+TWILIO_PHONE_NUMBER = os.getenv("TWILIO_PHONE_NUMBER")
+MESSAGING_SERVICE_SID = os.getenv("MESSAGING_SERVICE_SID")
+
+client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
 
 @app.route("/api/hospitals", methods=["GET"])
 def get_hospitals():
@@ -50,6 +58,30 @@ def get_hospitals():
                 })
 
         return jsonify(hospitals)
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+@app.route("/send-sms", methods=["POST"])
+def send_sms():
+    try:
+        # Get data from request
+        data = request.json
+        phone_number = data.get("phone_number")
+        message_text = data.get("message")
+
+        # Validate input
+        if not phone_number or not message_text:
+            return jsonify({"error": "Phone number and message are required"}), 400
+
+        # Send SMS
+        message = client.messages.create(
+            body=message_text,
+            from_=TWILIO_PHONE_NUMBER,  # You can also use `MESSAGING_SERVICE_SID`
+            to=phone_number
+        )
+
+        return jsonify({"success": True, "message_sid": message.sid}), 200
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500

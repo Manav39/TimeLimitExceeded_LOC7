@@ -18,6 +18,8 @@ import RidesHistory from "./pages/RidesHistory";
 import PaymentHistory from "./pages/PaymentHistory";
 import ConfirmBooking from "./pages/ConfirmBooking";
 import Quiz from "./pages/Quiz";
+import Profile from "./pages/Profile";
+import GovernmentPrograms from "./pages/GovernmentPrograms";
 
 function App() {
   return (
@@ -56,6 +58,8 @@ function AppContent() {
           <Route path="/emergencyhelpline" element={<EmergencyHelpline />} />
           <Route path="/ambulance" element={<Ambulances />} />
           <Route path="/hospitals" element={<Hospitals />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/governmentprograms" element={<GovernmentPrograms />} />
           <Route path="/driver/requests" element={<DriverRequests />} />
           <Route path="/driver/rides-history" element={<RidesHistory />} />
           <Route path="/driver/payment-history" element={<PaymentHistory />} />
