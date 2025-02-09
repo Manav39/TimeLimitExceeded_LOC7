@@ -7,7 +7,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: ["http://localhost:8080", "http://localhost:5173"], // Add all allowed origins
+    origin: "*", // Add all allowed origins
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"], // Correct the method syntax
     credentials: true,
     allowedHeaders: ["Content-Type", "Authorization"], // Allow specific headers

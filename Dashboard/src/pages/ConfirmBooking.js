@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { db } from "../firebase"; // Import Firestore
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { collection, query, where, getDocs, addDoc } from "firebase/firestore";
 import {
   GoogleMap,
   Marker,
@@ -48,17 +48,49 @@ const ConfirmBooking = () => {
       document.body.appendChild(script);
     });
   };
-  
+
+  const savePaymentDetails = async (paymentId, orderId, amount) => {
+    try {
+      const userEmail = localStorage.getItem("userEmail") || "user@example.com";
+      const userName = localStorage.getItem("userName") || "User";
+      const userMobile = localStorage.getItem("userMobile") || "9876543210";
+      const driverEmail =
+        localStorage.getItem("driverEmail") || "driver@example.com";
+
+      await addDoc(collection(db, "payments"), {
+        userEmail: userEmail,
+        userName: userName,
+        userMobile: userMobile,
+        driverEmail: driverEmail,
+        amount: amount / 100, // Convert paise to INR
+        currency: "INR",
+        paymentId: paymentId,
+        orderId: orderId,
+        status: "Success",
+        timestamp: new Date(),
+        userLocation: { lat: src[0], long: src[1] },
+        hospitalLocation: { lat: dst[0], long: dst[1] },
+        driverLocation: { lat: driverLat, long: driverLong },
+      });
+
+      console.log("✅ Payment details saved successfully!");
+    } catch (error) {
+      console.error("❌ Error saving payment details:", error);
+    }
+  };
+
+  const [paymentCompleted, setPaymentCompleted] = useState(false); // Track payment status
+
   const handlePay = async (e) => {
     e.preventDefault();
-  
+
     // Load Razorpay dynamically
     const razorpayLoaded = await loadRazorpay();
     if (!razorpayLoaded) {
       alert("Failed to load Razorpay. Please check your internet connection.");
       return;
     }
-  
+
     // Fetch order details from backend
     const response = await fetch("http://localhost:3000/pay", {
       method: "POST",
@@ -70,14 +102,14 @@ const ConfirmBooking = () => {
         currency: "INR",
       }),
     });
-  
+
     const order = await response.json();
-  
+
     if (!order.id) {
       alert("Failed to create order. Please try again.");
       return;
     }
-  
+
     var options = {
       key: "rzp_test_RCqZF0EIXUQt7G", // Razorpay Test Key
       amount: order.amount,
@@ -86,25 +118,34 @@ const ConfirmBooking = () => {
       description: "Ambulance Charge",
       image: "https://img.icons8.com/color/48/000000/ambulance.png",
       order_id: order.id,
-      handler: function (res) {
+      handler: async function (res) {
         alert("Payment Successful! Payment ID: " + res.razorpay_payment_id);
-        window.location.reload();
+
+        // ✅ Store payment details in Firestore
+        await savePaymentDetails(
+          res.razorpay_payment_id,
+          order.id,
+          order.amount
+        );
+
+        // ✅ Change button text to "Payment Done"
+        setPaymentCompleted(true);
       },
       prefill: {
-        name: "User",
-        email: "user@example.com",
-        contact: "9876543210",
+        name: localStorage.getItem("userName") || "User",
+        email: localStorage.getItem("userEmail") || "user@example.com",
+        contact: localStorage.getItem("userMobile") || "9876543210",
       },
       theme: {
         color: "#ff0000",
       },
     };
-  
-    var rzp1 = new window.Razorpay(options); // Ensure `window.Razorpay` is used
+
+    var rzp1 = new window.Razorpay(options);
     rzp1.on("payment.failed", function (res) {
       alert("Payment Failed: " + res.error.description);
     });
-  
+
     rzp1.open();
   };
 
@@ -179,10 +220,15 @@ const ConfirmBooking = () => {
             </p>
           ) : (
             <button
-              className="w-full p-3 mt-30 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700"
+              className={`w-full p-3 mt-30 ${
+                paymentCompleted
+                  ? "bg-gray-500"
+                  : "bg-green-600 hover:bg-green-700"
+              } text-white font-semibold rounded-lg`}
               onClick={handlePay}
+              disabled={paymentCompleted} // Disable button after successful payment
             >
-              Make Payment
+              {paymentCompleted ? "Payment Done" : "Make Payment"}
             </button>
           )}
         </div>

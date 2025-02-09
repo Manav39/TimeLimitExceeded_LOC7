@@ -13,18 +13,25 @@ const Quiz = () => {
       correctAnswer: 0,
     },
     {
-      scenario: "Which organ is primarily responsible for regulating blood sugar levels?",
+      scenario:
+        "Which organ is primarily responsible for regulating blood sugar levels?",
       options: ["Liver", "Pancreas", "Kidney", "Heart"],
       correctAnswer: 1,
     },
     {
-      scenario: "What is the term for a medical professional who specializes in the treatment of bones?",
+      scenario:
+        "What is the term for a medical professional who specializes in the treatment of bones?",
       options: ["Orthopedist", "Cardiologist", "Dermatologist", "Neurologist"],
       correctAnswer: 0,
     },
     {
       scenario: "Which of the following is a common symptom of a heart attack?",
-      options: ["Nausea", "Severe headache", "Shortness of breath", "All of the above"],
+      options: [
+        "Nausea",
+        "Severe headache",
+        "Shortness of breath",
+        "All of the above",
+      ],
       correctAnswer: 3,
     },
     {
@@ -33,7 +40,8 @@ const Quiz = () => {
       correctAnswer: 0,
     },
     {
-      scenario: "Which vitamin is produced by the body when exposed to sunlight?",
+      scenario:
+        "Which vitamin is produced by the body when exposed to sunlight?",
       options: ["Vitamin A", "Vitamin B12", "Vitamin D", "Vitamin C"],
       correctAnswer: 2,
     },
@@ -43,7 +51,8 @@ const Quiz = () => {
       correctAnswer: 1,
     },
     {
-      scenario: "Which organ is responsible for filtering toxins from the blood?",
+      scenario:
+        "Which organ is responsible for filtering toxins from the blood?",
       options: ["Liver", "Kidney", "Spleen", "Heart"],
       correctAnswer: 1,
     },
@@ -53,33 +62,54 @@ const Quiz = () => {
       correctAnswer: 0,
     },
     {
-      scenario: "Which disease is caused by the uncontrolled growth of abnormal cells in the body?",
+      scenario:
+        "Which disease is caused by the uncontrolled growth of abnormal cells in the body?",
       options: ["Diabetes", "Cancer", "Influenza", "Tuberculosis"],
       correctAnswer: 1,
     },
     {
-      scenario: "What is the medical term for the condition commonly known as 'lazy eye'?",
+      scenario:
+        "What is the medical term for the condition commonly known as 'lazy eye'?",
       options: ["Astigmatism", "Strabismus", "Amblyopia", "Myopia"],
       correctAnswer: 2,
     },
     {
-      scenario: "Which of the following is NOT a function of the human skeleton?",
-      options: ["Support", "Blood cell production", "Storage of fat", "Digestion"],
+      scenario:
+        "Which of the following is NOT a function of the human skeleton?",
+      options: [
+        "Support",
+        "Blood cell production",
+        "Storage of fat",
+        "Digestion",
+      ],
       correctAnswer: 3,
     },
     {
-      scenario: "Which part of the brain is responsible for regulating balance and coordination?",
+      scenario:
+        "Which part of the brain is responsible for regulating balance and coordination?",
       options: ["Cerebellum", "Cerebrum", "Medulla Oblongata", "Hypothalamus"],
       correctAnswer: 0,
     },
     {
-      scenario: "What is the condition of having too much glucose in the blood?",
-      options: ["Hyperglycemia", "Hypoglycemia", "Hypertension", "Hyperthermia"],
+      scenario:
+        "What is the condition of having too much glucose in the blood?",
+      options: [
+        "Hyperglycemia",
+        "Hypoglycemia",
+        "Hypertension",
+        "Hyperthermia",
+      ],
       correctAnswer: 0,
     },
     {
-      scenario: "Which type of diabetes is characterized by the body's inability to produce insulin?",
-      options: ["Type 1 Diabetes", "Type 2 Diabetes", "Gestational Diabetes", "Hypoglycemia"],
+      scenario:
+        "Which type of diabetes is characterized by the body's inability to produce insulin?",
+      options: [
+        "Type 1 Diabetes",
+        "Type 2 Diabetes",
+        "Gestational Diabetes",
+        "Hypoglycemia",
+      ],
       correctAnswer: 0,
     },
     {
@@ -88,13 +118,24 @@ const Quiz = () => {
       correctAnswer: 2,
     },
     {
-      scenario: "Which of the following is a risk factor for developing cardiovascular disease?",
-      options: ["High cholesterol", "Obesity", "Lack of exercise", "All of the above"],
+      scenario:
+        "Which of the following is a risk factor for developing cardiovascular disease?",
+      options: [
+        "High cholesterol",
+        "Obesity",
+        "Lack of exercise",
+        "All of the above",
+      ],
       correctAnswer: 3,
     },
     {
       scenario: "What does an EKG (electrocardiogram) measure?",
-      options: ["Blood pressure", "Heart rhythm", "Lung capacity", "Brain activity"],
+      options: [
+        "Blood pressure",
+        "Heart rhythm",
+        "Lung capacity",
+        "Brain activity",
+      ],
       correctAnswer: 1,
     },
     {
@@ -149,12 +190,13 @@ const Quiz = () => {
 
   return (
     <div className="bg-white text-red-600 font-sans min-h-screen flex flex-col items-center justify-center">
-      <h1 className="text-4xl font-bold mb-8">🩺 Medical Quiz Trivia</h1>
+      <h1 className="text-4xl font-bold mb-8">🩺 Medical Trivia</h1>
       {isGameOver ? (
         <div className="text-center">
-          <h2 className="text-3xl font-semibold mb-4">Quiz Completed!</h2>
+          <h2 className="text-3xl font-semibold mb-4">Trivia Completed!</h2>
           <p className="text-xl mb-6">
-            Your Score: <span className="font-bold">{score}</span> / {questions.length}
+            Your Score: <span className="font-bold">{score}</span> /{" "}
+            {questions.length}
           </p>
           {score < 5 ? (
             <p className="text-lg text-red-500 font-medium">
@@ -162,7 +204,8 @@ const Quiz = () => {
             </p>
           ) : (
             <p className="text-lg text-green-600 font-medium">
-              "Fantastic work! You're on the path to becoming a health expert! 🏆"
+              "Fantastic work! You're on the path to becoming a health expert!
+              🏆"
             </p>
           )}
           <button
@@ -178,7 +221,9 @@ const Quiz = () => {
             <h2 className="text-2xl font-semibold mb-6">
               Question {currentQuestion + 1}/{questions.length}
             </h2>
-            <p className="text-lg mb-8">{questions[currentQuestion].scenario}</p>
+            <p className="text-lg mb-8">
+              {questions[currentQuestion].scenario}
+            </p>
             <div className="flex flex-col gap-4">
               {questions[currentQuestion].options.map((option, index) => (
                 <button

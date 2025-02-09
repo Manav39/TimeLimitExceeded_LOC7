@@ -1,17 +1,36 @@
 import React, { useState, useEffect } from "react";
+import { db } from "../firebase"; // Import Firestore
+import { collection, query, where, getDocs } from "firebase/firestore";
 
 const PaymentHistory = () => {
   const [payments, setPayments] = useState([]);
+  const driverEmail = localStorage.getItem("driverEmail"); // Fetch driver email from localStorage
 
   useEffect(() => {
-    // Fetch payment history from backend (Replace with API call)
-    const mockPayments = [
-      { id: "TXN123456", date: "2024-02-05", type: "UPI", amount: 500 },
-      { id: "TXN654321", date: "2024-02-04", type: "Credit Card", amount: 700 },
-      { id: "TXN987654", date: "2024-02-03", type: "Cash", amount: 600 },
-    ];
-    setPayments(mockPayments);
-  }, []);
+    const fetchPayments = async () => {
+      if (!driverEmail) return;
+
+      try {
+        const q = query(
+          collection(db, "payments"),
+          where("driverEmail", "==", driverEmail)
+        );
+        const querySnapshot = await getDocs(q);
+
+        if (!querySnapshot.empty) {
+          const paymentRecords = querySnapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+          setPayments(paymentRecords);
+        }
+      } catch (error) {
+        console.error("Error fetching payment history:", error);
+      }
+    };
+
+    fetchPayments();
+  }, [driverEmail]);
 
   return (
     <div className="p-6">
@@ -22,9 +41,14 @@ const PaymentHistory = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {payments.map((payment) => (
             <div key={payment.id} className="p-4 border rounded-lg shadow-sm">
-              <h3 className="text-lg font-semibold">📅 {payment.date}</h3>
-              <p className="text-sm text-gray-600">🆔 {payment.id}</p>
-              <p className="text-sm text-gray-600">💳 {payment.type}</p>
+              <h3 className="text-lg font-semibold">
+                📅{" "}
+                {new Date(
+                  payment.timestamp?.seconds * 1000
+                ).toLocaleDateString()}
+              </h3>
+              <p className="text-sm text-gray-600">🆔 {payment.paymentId}</p>
+              <p className="text-sm text-gray-600">💳 {payment.currency}</p>
               <p className="text-sm font-bold mt-2">💰 ₹{payment.amount}</p>
             </div>
           ))}
