@@ -16,6 +16,9 @@ const routes = [
 function Sidebar() {
   const location = useLocation();
 
+  const name = localStorage.getItem("userName") || "John Doe";
+  const email = localStorage.getItem("driverEmail") || "john@example.com";
+
   return (
     <div className="w-64 bg-white border-r h-screen flex flex-col">
       {/* Header */}
@@ -64,12 +67,18 @@ function Sidebar() {
       {/* Footer */}
       <div className="border-t p-4">
         <div className="flex items-center gap-2">
-          <Avatar className="h-8 w-8">
-            <img src="/placeholder-user.jpg" alt="User" />
-          </Avatar>
+        <Avatar className="h-8 w-8">
+          <img
+            src="https://robohash.org/user.png?size=100x100"
+            alt="User"
+            className="w-full h-full object-cover rounded-full"
+            onError={(e) => e.target.src = "https://ui-avatars.com/api/?name=User&background=random"}
+          />
+        </Avatar>
+
           <div className="flex flex-col">
-            <span className="text-sm font-medium text-red-600">John Doe</span>
-            <span className="text-xs text-red-600">john@example.com</span>
+            <span className="text-sm font-medium text-red-600">{name}</span>
+            <span className="text-xs text-red-600">{email}</span>
           </div>
         </div>
       </div>

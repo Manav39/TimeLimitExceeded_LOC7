@@ -20,6 +20,7 @@ import ConfirmBooking from "./pages/ConfirmBooking";
 import Quiz from "./pages/Quiz";
 import Profile from "./pages/Profile";
 import GovernmentPrograms from "./pages/GovernmentPrograms";
+import Feedback from "./pages/Feedback";
 
 import { Buffer } from "buffer";
 import process from "process";
@@ -69,6 +70,7 @@ function AppContent() {
           <Route path="/driver/rides-history" element={<RidesHistory />} />
           <Route path="/driver/payment-history" element={<PaymentHistory />} />
           <Route path="/driver/quiz" element={<Quiz />} />
+          <Route path="/feedback" element={<Feedback />} />
         </Routes>
       </main>
     </div>

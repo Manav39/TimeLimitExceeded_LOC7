@@ -153,9 +153,9 @@ function DriverSidebar() {
       {/* Footer */}
       <div className="border-t p-4">
         <div className="flex items-center gap-2">
-          <Avatar className="h-8 w-8">
-            <img src="/placeholder-user.jpg" alt="User" />
-          </Avatar>
+        <Avatar className="h-8 w-8">
+          <img src="https://robohash.org/random-user.png" alt="User" />
+        </Avatar>
           <div className="flex flex-col">
             <span className="text-sm font-medium text-red-600">{name}</span>
             <span className="text-xs text-red-600">{email}</span>
