@@ -17,6 +17,7 @@ import DriverRequests from "./pages/DriverRequests";
 import RidesHistory from "./pages/RidesHistory";
 import PaymentHistory from "./pages/PaymentHistory";
 import ConfirmBooking from "./pages/ConfirmBooking";
+import Quiz from "./pages/Quiz";
 
 function App() {
   return (

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Ambulance as AmbulanceIcon, PhoneCall } from "lucide-react";
 import { db } from "../firebase";
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { collection, query, where, getDocs, addDoc } from "firebase/firestore";
 import ConfirmBooking from "./ConfirmBooking";
 import {
   GoogleMap,
@@ -120,12 +120,34 @@ const Ambulances = () => {
       (selectedCategory === "" || ambulance.category === selectedCategory)
   );
 
-  const handleBookNow = () => {
+  const handleBookNow = async () => {
     if (selectedAmbulance) {
       const params = new URLSearchParams(location.search);
       const src = params.get("source");
       const dst = params.get("destination");
       console.log(src, dst);
+      const rideDetails = {
+        driverId: selectedAmbulance.id,
+        driverName: selectedAmbulance.name,
+        license: selectedAmbulance.license,
+        ambulanceType: selectedAmbulance.ambulanceType,
+        mobile: selectedAmbulance.mobile,
+        email: selectedAmbulance.email,
+        lat: selectedAmbulance.lat,
+        long: selectedAmbulance.long,
+        ambulanceNumber: selectedAmbulance.ambulanceNumber,
+        employerId: selectedAmbulance.employerId,
+        category: selectedAmbulance.category,
+        status: "Pending",
+        confirm: "No", // Initially set to "No"
+        timestamp: new Date(),
+        source: src, // User's location
+        destination: dst, // Hospital location
+      };
+
+      const docRef = await addDoc(collection(db, "rides"), rideDetails);
+      console.log("Ride stored successfully with ID:", docRef.id);
+      localStorage.setItem("driverEmail", selectedAmbulance.email);
       navigate(
         `/confirm-booking?src=${src}&dst=${dst}&lat=${selectedAmbulance.lat}&long=${selectedAmbulance.long}`
       );

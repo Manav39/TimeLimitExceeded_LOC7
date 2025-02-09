@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import { db } from "../firebase"; // Import Firestore
+import { collection, query, where, getDocs } from "firebase/firestore";
 import {
   GoogleMap,
   Marker,
@@ -24,11 +26,37 @@ const ConfirmBooking = () => {
   const [mapCenter, setMapCenter] = useState({ lat: src[0], lng: src[1] });
   const [distance, setDistance] = useState("");
   const [duration, setDuration] = useState("");
+  const [confirmStatus, setConfirmStatus] = useState("No"); // Default status: "No"
+  const driverEmail = localStorage.getItem("driverEmail"); // Fetch driver email from localStorage
 
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: GOOGLE_MAPS_API,
     libraries,
   });
+
+  // Fetch ride confirmation status from Firestore
+  useEffect(() => {
+    const fetchRideStatus = async () => {
+      if (!driverEmail) return;
+
+      const q = query(
+        collection(db, "rides"),
+        where("email", "==", driverEmail)
+      );
+      const querySnapshot = await getDocs(q);
+
+      if (!querySnapshot.empty) {
+        const rideData = querySnapshot.docs[0].data();
+        setConfirmStatus(rideData.confirm); // Update confirm status
+      }
+    };
+
+    fetchRideStatus();
+
+    // Poll for status update every 5 seconds
+    const interval = setInterval(fetchRideStatus, 5000);
+    return () => clearInterval(interval);
+  }, [driverEmail]);
 
   useEffect(() => {
     if (!window.google || !window.google.maps) return;
@@ -70,6 +98,20 @@ const ConfirmBooking = () => {
     <>
       <div className="p-6">
         <h1 className="text-3xl font-bold mb-4">Confirm Your Booking</h1>
+        <div className="mt-4 text-center">
+          {confirmStatus === "No" ? (
+            <p className="text-red-500 mt-30 text-lg font-medium">
+              ⏳ Waiting for the rider to confirm...
+            </p>
+          ) : (
+            <button
+              className="w-full p-3 mt-30 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700"
+              onClick={() => alert("Redirecting to Payment")}
+            >
+              Make Payment
+            </button>
+          )}
+        </div>
         <p className="text-lg">🚑 Route Overview:</p>
 
         {/* Distance and Duration */}
@@ -117,14 +159,6 @@ const ConfirmBooking = () => {
         </div>
 
         {/* Payment Button */}
-      </div>
-      <div>
-        <button
-          className="mt-24 w-full p-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700"
-          onClick={() => alert("Redirecting to Payment")}
-        >
-          Make Payment
-        </button>
       </div>
     </>
   );
