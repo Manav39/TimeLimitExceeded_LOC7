@@ -69,6 +69,6 @@ Sanjeevani is built using a robust and scalable tech stack:
 1. Advait Yadav
 2. Manav Shah
 3. Sarid Qureshi
-4. Sneha Singh
+4. Sneha Menat
 
 > **Sanjeevani – Because every second matters in an emergency!** 🚑💙
